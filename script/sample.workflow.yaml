@@ -1,0 +1,14 @@
+workflow:
+  - workflow_name: 'Change permalink'
+    repeat: 1
+    task_list:
+      - 'login_to_admin'
+      - 'change_permalink'
+      - 'click_on_save_changes'
+
+  - workflow_name: 'Set anyone can register'
+    repeat: 2
+    task_list:
+      - 'login_to_admin'
+      - 'change_anyone_can_register'
+      - 'click_on_save_changes'

@@ -1,0 +1,14 @@
+workflow:
+  - workflow_name: 'Create wordpress post'
+    repeat: 5
+    task_list:
+      - 'login_to_admin'
+      - 'goto_post_and_create_new_post'
+      - 'click_on_publish'
+
+  - workflow_name: 'Create eCommerce product as draft'
+    repeat: 2
+    task_list:
+      - 'login_to_admin'
+      - 'goto_products_page_and_enter_new_product_details'
+      - 'click_on_save_as_draft'
