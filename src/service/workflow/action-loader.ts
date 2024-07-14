@@ -13,7 +13,6 @@ export default class ActionLoader {
     const data: unknown[] = [];
 
     for (const action of this.actionList) {
-      
       // const _import = await import(action.projectDirectory);
       const _import = await import(toFileUrl(action.projectDirectory));
       const _module = _import.default;
