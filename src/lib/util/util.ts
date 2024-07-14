@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import csvtojson from 'csvtojson';
+import { pathToFileURL } from 'url';
 
 /**
  * Checks if a file has a specific extension.
@@ -86,6 +87,15 @@ export const searchFiles = (directory: string, extensions: string[], ignoredDire
     console.log(error);
   }
 };
+
+export const toFileUrl = (filePath: string) => {
+  try{
+    const normalizedPath = path.normalize(filePath).replace(/\\/g, '/')
+    return pathToFileURL(normalizedPath).href
+  }catch(error){
+    console.log(error)
+  }
+}
 
 export const toBoolean = (bool: string): boolean => {
   if (bool === 'true') return true;
