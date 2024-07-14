@@ -15,5 +15,5 @@
       "@testConfig": ["test.config.ts"]
     }
   },
-  "include": ["src/**/*", "pages/**/*", "test.config.ts"]
+  "include": ["src/**/*", "pages/**/*", "actions/**/*", "test.config.ts"]
 }
