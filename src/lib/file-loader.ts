@@ -1,5 +1,5 @@
 import path from 'path';
-import { searchFiles } from '../util/util';
+import { searchFiles } from './util/util';
 
 export type FileInfo = {
   baseName: string;
@@ -9,7 +9,8 @@ export type FileInfo = {
 };
 
 export interface FileLoaderInterface {
-  objectFilter(data: Object[], { reverse, include, exclude }: { reverse?: boolean; include?: string[]; exclude?: string[] }): Object[];
+  objectPropertyFilter(data: Object[], { reverse, include, exclude }: { reverse?: boolean; include?: string[]; exclude?: string[] }): Object[];
+  arrayFilter(data: Object[], { reverse, include, exclude }: { reverse?: boolean; include?: string[]; exclude?: string[] }): Object[];
 }
 
 export default class FileLoader implements FileLoaderInterface {
@@ -56,7 +57,7 @@ export default class FileLoader implements FileLoaderInterface {
     }
   }
 
-  objectFilter(data: Object[], { reverse, include, exclude }: { reverse: boolean; include: string[]; exclude: string[] }): Object[] {
+  objectPropertyFilter(data: Object[], { reverse, include, exclude }: { reverse: boolean; include: string[]; exclude: string[] }): Object[] {
     try {
       const includeList = data.map((data) => {
         const mappedData = {};
@@ -87,5 +88,9 @@ export default class FileLoader implements FileLoaderInterface {
     } catch (error) {
       console.log('Failed to apply filters to mock data');
     }
+  }
+
+  arrayFilter(data: Object[], { reverse, include, exclude }: { reverse: boolean; include: string[]; exclude: string[] }): object[] {
+    return data;
   }
 }
