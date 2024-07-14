@@ -1,3 +1,4 @@
+import { toFileUrl } from '@src/lib/util/util';
 import path from 'path';
 
 export default class ActionLoader {
@@ -12,7 +13,9 @@ export default class ActionLoader {
     const data: unknown[] = [];
 
     for (const action of this.actionList) {
-      const _import = await import(action.projectDirectory);
+      
+      // const _import = await import(action.projectDirectory);
+      const _import = await import(toFileUrl(action.projectDirectory));
       const _module = _import.default;
       const instance = new _module();
       const properties = Object.getOwnPropertyDescriptors(Object.getPrototypeOf(instance));

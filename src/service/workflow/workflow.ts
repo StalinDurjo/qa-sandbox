@@ -1,1 +1,3 @@
-export default class Workflow {}
+export default class Workflow {
+  runAll(){}
+}
