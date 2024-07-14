@@ -1,3 +1,4 @@
+project: 'wordpress2'
 workflow:
   - workflow_name: 'Create wordpress post'
     repeat: 5

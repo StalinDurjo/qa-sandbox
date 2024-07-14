@@ -1,4 +1,4 @@
-project: 'wordpress'
+project: 'demo-project1'
 workflow:
   - workflow_name: 'Change permalink'
     repeat: 1
