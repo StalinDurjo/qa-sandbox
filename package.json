@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/StalinDurjo/qa-sandbox#readme",
   "dependencies": {
+    "csvtojson": "^2.0.10",
     "express": "^4.19.2",
     "playwright": "^1.45.1",
     "yaml": "^2.4.5"
