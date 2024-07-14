@@ -22,7 +22,7 @@ export default class FileLoader implements FileLoaderInterface {
     this.searchDirectory = searchDirectory || 'default';
   }
 
-  protected loadFiles({ searchDirectory = 'default', fileTypes, excludeDirectories }: { searchDirectory: string | 'default'; fileTypes: string[]; excludeDirectories: string[] }) {
+  loadFiles({ searchDirectory = 'default', fileTypes, excludeDirectories }: { searchDirectory: string | 'default'; fileTypes: string[]; excludeDirectories?: string[] }) {
     try {
       let directoryPath: string;
 
