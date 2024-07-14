@@ -1,0 +1,15 @@
+project: 'wordpress'
+actions:
+  - actionName: 'Change permalink'
+    repeat: 1
+    actionSteps:
+      - 'loginToAdmin'
+      - 'changePermalink'
+      - 'clickOnSaveChanges'
+
+  - actionName: 'Set anyone can register'
+    repeat: 1
+    actionSteps:
+      - 'loginToAdmin'
+      - 'changeAnyoneCanRegister'
+      - 'clickOnSaveChanges'
