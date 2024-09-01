@@ -1,7 +1,7 @@
 {
   "files.autoSave": "off",
   "editor.fontSize": 13,
-  "editor.fontFamily": "Monaco, 'Courier New', monospace",
+  // "editor.fontFamily": "Monaco, 'Courier New', monospace",
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "editor.defaultFormatter": "esbenp.prettier-vscode",

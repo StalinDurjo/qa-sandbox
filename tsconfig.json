@@ -15,6 +15,6 @@
       "@testConfig": ["test.config.ts"]
     }
   },
-  "include": ["src/**/*", "pages/**/*", "action/**/*", "test.config.ts"],
+  "include": ["src/**/*", "pages/**/*", "actions/**/*", "test.config.ts"],
   "exclude": ["node_modules"]
 }
