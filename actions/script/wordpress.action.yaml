@@ -1,13 +1,19 @@
 project: 'wordpress'
 actions:
   - actionName: 'Change permalink'
-    repeat: 1
+    actionType: 'e2e'
+    repeat: 2
     actionSteps:
       - 'loginToAdmin'
       - 'changePermalink'
       - 'clickOnSaveChanges'
+    parameter:
+      - username: 'admin'
+        password: 'admin@email.com'
+      - permalinkType: 'Post name'
 
   - actionName: 'Set anyone can register'
+    actionType: 'api'
     repeat: 1
     actionSteps:
       - 'loginToAdmin'

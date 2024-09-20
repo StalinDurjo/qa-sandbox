@@ -1,5 +1,4 @@
-import FileLoader, { FileInfo } from '@src/lib/file-loader';
-import { isFileOfType } from '@src/lib/util/util';
+import FileLoader from '@src/lib/file-loader';
 import { parseYamlToObject } from '@src/lib/util/yaml';
 import path from 'path';
 
@@ -8,6 +7,14 @@ type ActionScriptInfo = {
   actionName: string;
   repeat: number;
   actionSteps: string[];
+  parameter: any[];
+};
+
+type ActionScriptParameter = {
+  project: string;
+  actionName: string;
+  _function: string;
+  parameter: unknown[];
 };
 
 export default class ActionScriptLoader {
@@ -16,34 +23,11 @@ export default class ActionScriptLoader {
   private searchPath: string;
 
   constructor() {
-    this.searchPath = path.join(path.resolve(process.cwd()) + '/action/script');
+    this.searchPath = path.join(path.resolve(process.cwd()) + '/actions/script');
     this.fileLoader = new FileLoader({ prefix: this.prefix, searchDirectory: this.searchPath });
   }
 
-  private isValidActionFile(file: FileInfo) {
-    try {
-      // check if file is of type .yaml
-      if (!isFileOfType('.yaml', file.filePath)) {
-        return false;
-      }
-
-      const data = parseYamlToObject(file.filePath);
-      // check if data contains property of this._prefix and is an array
-      if (!data.hasOwnProperty(this.prefix) && Array.isArray(data[this.prefix])) {
-        return false;
-      }
-
-      if (!data.hasOwnProperty('project')) {
-        return false;
-      }
-
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  private loadFromYaml(): ActionScriptInfo[] {
+  loadFromYaml(): ActionScriptInfo[] {
     const actionScriptList: ActionScriptInfo[] = [];
     const files = this.fileLoader.loadFiles({ searchDirectory: this.searchPath, fileTypes: ['.yaml'] });
 
@@ -58,16 +42,34 @@ export default class ActionScriptLoader {
     return actionScriptList;
   }
 
-  private filterByProject({ projectName, actionList: actionScriptList }: { projectName: string; actionList: ActionScriptInfo[] }) {
-    return actionScriptList.filter((data) => data.project === projectName);
+  loadParameter(): ActionScriptParameter[] {
+    const scriptList = this.loadFromYaml();
+    const parameterList: ActionScriptParameter[] = [];
+
+    for (const scriptDetail of scriptList) {
+      for (const [index, actionStep] of scriptDetail.actionSteps.entries()) {
+        parameterList.push({
+          project: scriptDetail.project,
+          actionName: scriptDetail.actionName,
+          _function: actionStep,
+          parameter: scriptDetail.parameter ? scriptDetail.parameter[index] : null
+        });
+      }
+    }
+
+    return parameterList;
   }
 
-  private filterByName({ actionName, actionList: actionScriptList }: { actionName: string; actionList: ActionScriptInfo[] }) {
-    return actionScriptList.filter((data) => data.actionName === actionName);
+  private filterByProject({ project, actionList }: { project: string; actionList: ActionScriptInfo[] }) {
+    return actionList.filter((data) => data.project === project);
   }
 
-  loadScript({ projectName, actionName }) {
-    const workflowByProject = this.filterByProject({ projectName, actionList: this.loadFromYaml() });
-    return this.filterByName({ actionName, actionList: workflowByProject });
+  private filterByActionName({ actionName, actionList }: { actionName: string; actionList: ActionScriptInfo[] }) {
+    return actionList.filter((data) => data.actionName === actionName);
+  }
+
+  loadScript({ project, actionName }) {
+    const workflowByProject = this.filterByProject({ project, actionList: this.loadFromYaml() });
+    return this.filterByActionName({ actionName, actionList: workflowByProject });
   }
 }

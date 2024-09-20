@@ -1,6 +1,4 @@
-import ActionRegistry from '@src/service/action/registry';
-
-const actionRegistry = new ActionRegistry();
+import { actionRegistry } from '@src/service/action/action-registry';
 
 actionRegistry.register({
   name: 'wordpress',
