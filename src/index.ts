@@ -4,29 +4,27 @@ import '../actions/register';
 import BrowserUtil from './lib/browser';
 import action from './service/action/action';
 import WpLoginPage from '@pages/woocommerce/wp-admin/auth/login.page';
+import MockData from './service/mock-data/mock-data';
 
 (async function main() {
   // start local server
   await initServer();
 
-  // await sandbox();
+  const mocker = new MockData();
+  // mocker.test();
+  mocker.generate({ properties: ['firstName', 'lastName', 'fullName', 'country', 'state', 'iban'] });
+
+  // generate random data
+  // mocker.generate()
+
+  // generate data with specific properties
+  // mocker.generate({name, email, address})
+
+  // generate data with specified properties including overriden data
+  // mocker.generate({
+  //   overwrite: {
+  //     name: 'Robert'
+  //   },
+  //   properties: {name, email, address, phone}
+  // })
 })();
-
-async function sandbox() {
-  const browser = new BrowserUtil();
-  const page = await browser.createInstance();
-
-  const loginPage = new WpLoginPage(page);
-  await page.goto('http://localhost/automation/wp-login.php');
-  await loginPage.enterUsername('admin');
-  await loginPage.enterPassword('admin@email.com');
-  await loginPage.clickOnLogin();
-  await page.locator('.wp-menu-name').getByText('Settings').click();
-  await page.locator('.wp-submenu > li > a').getByText('Permalinks').click();
-  await page.locator(`//div/input[@name="selection"]/following-sibling::div/label`).getByText('Post name').click();
-  await loginPage.clickOnSaveChanges();
-
-  await page.waitForTimeout(4000);
-
-  await browser.closeInstance();
-}
