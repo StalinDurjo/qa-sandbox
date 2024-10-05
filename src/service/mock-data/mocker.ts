@@ -1,21 +1,14 @@
-import { Faker, faker, fakerEN_CA, fakerEN_IN } from '@faker-js/faker';
-
-const _fakerCountries = ['US', 'Canada'];
-
-const _faker: { [key: string]: Faker } = {
-  base: faker,
-  canada: fakerEN_CA,
-  india: fakerEN_IN
-};
+import LocationModule from './modules/location';
 
 export default class Mocker {
-  private country: string;
+  readonly location: LocationModule;
 
   constructor(country: string) {
-    this.country = country;
+    this.location = new LocationModule(country);
   }
 
-  firstName() {
-    return _faker[this.country].person.firstName;
+  async initialize() {
+    await this.location.loadLocation();
+    return this;
   }
 }

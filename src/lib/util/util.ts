@@ -89,16 +89,25 @@ export const searchFiles = (directory: string, extensions: string[], ignoredDire
 };
 
 export const toFileUrl = (filePath: string) => {
-  try{
-    const normalizedPath = path.normalize(filePath).replace(/\\/g, '/')
-    return pathToFileURL(normalizedPath).href
-  }catch(error){
-    console.log(error)
+  try {
+    const normalizedPath = path.normalize(filePath).replace(/\\/g, '/');
+    return pathToFileURL(normalizedPath).href;
+  } catch (error) {
+    console.log(error);
   }
-}
+};
 
 export const toBoolean = (bool: string): boolean => {
   if (bool === 'true') return true;
   else if (bool === 'false') return false;
   else return undefined;
+};
+
+export const randomize = <T>(array: T[]): T => {
+  if (!Array.isArray(array) || array.length <= 0) {
+    return null;
+  }
+
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex];
 };

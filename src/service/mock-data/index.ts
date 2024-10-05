@@ -1,9 +1,9 @@
-import { localdb } from '../local-db';
+import { database } from '../local-database';
 
 export const initializeMockData = async () => {
-  await localdb.exec(__dirname + '/queries/country.sql');
-  await localdb.exec(__dirname + '/queries/division.sql');
-  await localdb.exec(__dirname + '/queries/subdivision.sql');
-  await localdb.exec(__dirname + '/queries/postcode.sql');
-  await localdb.exec(__dirname + '/queries/address.sql');
+  await database.exec(__dirname + '/queries/country.sql');
+  await database.exec(__dirname + '/queries/division.sql');
+  await database.exec(__dirname + '/queries/subdivision.sql');
+  await database.exec(__dirname + '/queries/postcode.sql');
+  await database.exec(__dirname + '/queries/address.sql');
 };
