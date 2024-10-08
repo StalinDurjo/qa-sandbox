@@ -1,9 +1,18 @@
 {
   "files.autoSave": "off",
   "editor.fontSize": 13,
-  // "editor.fontFamily": "Monaco, 'Courier New', monospace",
+  "editor.fontFamily": "Monaco, 'Courier New', monospace",
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "sqlite",
+      "database": "${workspaceFolder:qa-sandbox}/out/sqlite.db"
+    }
+  ],
+  "sqltools.useNodeRuntime": true
 }

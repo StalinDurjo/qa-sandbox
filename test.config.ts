@@ -1,3 +1,5 @@
 import { defineConfig } from '@src/service/define-config';
 
-export default defineConfig({});
+export default defineConfig({
+  environment: 'development'
+});

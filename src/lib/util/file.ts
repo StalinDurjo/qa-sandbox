@@ -42,11 +42,12 @@ export const createDirectory = async (directoryPath: string) => {
 
 export const createFileSync = (fileName: string, filePath: string) => {
   try {
-    if (fs.existsSync(filePath + '/' + fileName)) {
-      console.log(`File already exists. File Name: ${fileName} - File Path: ${filePath}`);
-    } else {
+    if (!fs.existsSync(filePath + '/' + fileName)) {
       fs.writeFileSync(filePath + '/' + fileName, '');
+      return true;
     }
+
+    return false;
   } catch (error) {
     console.log(`Error encountered while creating directory: ${error}`);
     console.log(error);
