@@ -1,5 +1,5 @@
 import { Faker, faker, fakerEN_CA, fakerEN_IN } from '@faker-js/faker';
-import { localeMockerSupportList } from '@src/constant';
+import { localeSupportList } from '@src/constant';
 
 export default class BaseMocker {
   protected isSupported: boolean;
@@ -14,6 +14,6 @@ export default class BaseMocker {
 
   constructor(country: string) {
     this.baseCountry = country;
-    this.isSupported = localeMockerSupportList.includes(this.baseCountry);
+    this.isSupported = localeSupportList.includes(this.baseCountry);
   }
 }

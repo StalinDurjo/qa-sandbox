@@ -2,4 +2,4 @@
 export const LOCAL_DATABASE = 'sqlite.db';
 
 // list of countries for which in-built mock data is available
-export const localeMockerSupportList = ['US', 'BD'];
+export const localeSupportList = ['US', 'BD'];

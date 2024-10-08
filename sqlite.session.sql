@@ -5,3 +5,5 @@ SELECT * FROM post_code;
 SELECT * FROM address;
 
 -- DROP TABLE division;
+-- DROP TABLE country;
+

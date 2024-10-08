@@ -1,7 +1,6 @@
 import { database } from '@src/service/local-database';
 import BaseMocker from '../../base-mocker';
 import { randomize } from '@src/lib/util/util';
-import { localeMockerSupportList as localeSupportList } from '@src/constant';
 
 export default class LocationModule extends BaseMocker {
   private _locationData: Promise<unknown>;
@@ -59,27 +58,27 @@ export default class LocationModule extends BaseMocker {
   }
 
   async division() {
-    return localeSupportList.includes(this.baseCountry) ? this._division : this._faker[this.baseCountry]?.location.state();
+    return this.isSupported ? this._division : this._faker[this.baseCountry]?.location.state();
   }
 
   async subdivision() {
-    return localeSupportList.includes(this.baseCountry) ? this._subdivision : this._faker[this.baseCountry]?.location.county();
+    return this.isSupported ? this._subdivision : this._faker[this.baseCountry]?.location.county();
   }
 
   async city() {
-    return localeSupportList.includes(this.baseCountry) ? this._city : this._faker[this.baseCountry]?.location.city();
+    return this.isSupported ? this._city : this._faker[this.baseCountry]?.location.city();
   }
 
   async streetAddress() {
-    return localeSupportList.includes(this.baseCountry) ? this._streetAddress : this._faker[this.baseCountry]?.location.streetAddress();
+    return this.isSupported ? this._streetAddress : this._faker[this.baseCountry]?.location.streetAddress();
   }
 
   async postcode() {
-    return localeSupportList.includes(this.baseCountry) ? this._postcode : this._faker[this.baseCountry]?.location.zipCode();
+    return this.isSupported ? this._postcode : this._faker[this.baseCountry]?.location.zipCode();
   }
 
   async fullAddress() {
-    return localeSupportList.includes(this.baseCountry)
+    return this.isSupported
       ? `${this._streetAddress}, ${this._city}, ${this._postcode}, ${this.baseCountry}`
       : this._faker[this.baseCountry]?.location.streetAddress({ useFullAddress: true });
   }
