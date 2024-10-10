@@ -17,7 +17,7 @@ export default class BankAccountModule extends BaseMocker {
     super(country);
   }
 
-  async loadBankAccount() {
+  async load() {
     try {
       if (!this.isSupported) return;
 
@@ -46,7 +46,7 @@ export default class BankAccountModule extends BaseMocker {
   }
 
   async accountType() {
-    // return this.isSupported ? this._accountType : this._faker[this.baseCountry]?.finance.accountType();
+    return this.isSupported ? this._accountType : this._faker[this.baseCountry]?.finance.accountName();
   }
 
   async currency() {
@@ -66,10 +66,10 @@ export default class BankAccountModule extends BaseMocker {
   }
 
   async sortCode() {
-    // return this.isSupported ? this._sortCode : this._faker[this.baseCountry]?.finance.sortCode();
+    return this.isSupported ? this._sortCode : this._faker[this.baseCountry]?.finance.pin(6);
   }
 
   async bsbNumber() {
-    // return this.isSupported ? this._bsbNumber : this._faker[this.baseCountry]?.finance.bsbNumber();
+    return this.isSupported ? this._bsbNumber : this._faker[this.baseCountry]?.finance.pin(6);
   }
 }

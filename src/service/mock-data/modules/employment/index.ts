@@ -16,7 +16,7 @@ export default class EmploymentModule extends BaseMocker {
     super(country);
   }
 
-  async loadEmployment() {
+  async load() {
     try {
       if (!this.isSupported) return;
 

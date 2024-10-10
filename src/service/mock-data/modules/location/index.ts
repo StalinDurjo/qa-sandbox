@@ -15,7 +15,7 @@ export default class LocationModule extends BaseMocker {
     super(country);
   }
 
-  async loadLocation() {
+  async load() {
     try {
       if (!this.isSupported) return;
 

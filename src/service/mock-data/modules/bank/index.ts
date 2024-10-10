@@ -13,7 +13,7 @@ export default class BankModule extends BaseMocker {
     super(country);
   }
 
-  async loadBank() {
+  async load() {
     try {
       if (!this.isSupported) return;
 
@@ -37,7 +37,7 @@ export default class BankModule extends BaseMocker {
   }
 
   async name() {
-    // return this.isSupported ? this._name : this._faker[this.baseCountry]?.finance.bankName();
+    return this.isSupported ? this._name : this._faker[this.baseCountry]?.company.name();
   }
 
   async swiftCode() {
