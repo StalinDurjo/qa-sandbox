@@ -1,5 +1,5 @@
 import { database } from '@src/service/local-database';
-import BaseMocker from '../../base-mocker';
+import BaseMocker from '../../base';
 import { randomize } from '@src/lib/util/util';
 
 export default class BankModule extends BaseMocker {

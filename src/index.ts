@@ -1,8 +1,11 @@
 import '@testConfig';
 import { initServer } from './server/server';
 import '../actions/register';
+import '../mocker/register';
 import { initializeDatabase } from './service/local-database';
-import { initializeMockData } from './service/mock-data';
+import { initializeMockData } from './service/mocker';
+import { routeManager } from './server/route/route-manager';
+import { mockRegistry } from './service/mock-request/mock-registry';
 
 (async function () {
   // start local server
@@ -11,4 +14,7 @@ import { initializeMockData } from './service/mock-data';
   await initializeDatabase();
   // populate database with mock data
   await initializeMockData();
+
+  await mockRegistry.initialize();
+  routeManager.initialize();
 })();

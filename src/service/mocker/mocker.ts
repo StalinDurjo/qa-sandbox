@@ -11,7 +11,7 @@ export default class Mocker {
   readonly employment: EmploymentModule;
   readonly person: PersonModule;
 
-  constructor({ locale }: { locale: string }) {
+  constructor({ locale }: { locale?: string } = {}) {
     this.location = new LocationModule(locale);
     this.bank = new BankModule(locale);
     this.bankAccount = new BankAccountModule(locale);
