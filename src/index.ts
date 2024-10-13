@@ -5,7 +5,7 @@ import '../mocker/register';
 import { initializeDatabase } from './service/local-database';
 import { initializeMockData } from './service/mocker';
 import { routeManager } from './server/route/route-manager';
-import { mockRegistry } from './service/mock-request/mock-registry';
+import { mockRegistry } from './service/mocker-request/mocker-registry';
 
 (async function () {
   // start local server

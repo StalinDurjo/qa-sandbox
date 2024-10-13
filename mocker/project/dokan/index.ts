@@ -1,15 +1,14 @@
-import MockProject from '@src/service/mock-request/mock-project';
+import MockerProject from '@src/service/mocker-request/mocker-project';
 
-const project = new MockProject({ projectName: 'dokan' });
+const project = new MockerProject({ projectName: 'dokan' });
 
-project.add({
-  endpoint: '/demo-endpoint',
-  locale: 'US',
-  callback: async (data: unknown) => {
-    console.log(data['payload']);
-    console.log(data['mocker']);
+project.addMethod(
+  {
+    endpoint: '/generate-vendor-data'
+  },
+  async (data) => {
     return data;
   }
-});
+);
 
 export default project;

@@ -1,4 +1,4 @@
-import { mockRegistry } from '@src/service/mock-request/mock-registry';
+import { mockRegistry } from '@src/service/mocker-request/mocker-registry';
 
 mockRegistry.register({
   name: 'dokan',
