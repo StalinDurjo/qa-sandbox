@@ -2,16 +2,15 @@ import path from 'path';
 import { promises as fs } from 'fs';
 
 interface ProjectConfig {
-  name: string;
   directory: string;
 }
 
 class MockerRegistry {
   private registeredProjectList: ProjectConfig[] = [];
 
-  register({ name, directory }: ProjectConfig): void {
+  register({ directory }: ProjectConfig): void {
     const projectDirectory = path.normalize(path.join(path.resolve(process.cwd()) + '/mocker/project', directory));
-    this.registeredProjectList.push({ name, directory: projectDirectory });
+    this.registeredProjectList.push({ directory: projectDirectory });
   }
 
   getRegisteredProjects(): ReadonlyArray<ProjectConfig> {
@@ -29,7 +28,7 @@ class MockerRegistry {
           console.warn(`Project file not found: ${modulePath}`);
         }
       } catch (error) {
-        console.error(`Error initializing project ${project.name}:`, error);
+        console.error(`Error initializing project ${project.directory}:`, error);
       }
     }
   }
