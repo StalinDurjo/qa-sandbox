@@ -1,5 +1,6 @@
 import { Faker, faker, fakerEN_CA, fakerEN_IN } from '@faker-js/faker';
 import { localeSupportList } from '@src/constant';
+import { randomize } from '@src/lib/util/util';
 
 export default class BaseMocker {
   protected isSupported: boolean;
@@ -13,7 +14,8 @@ export default class BaseMocker {
   protected baseCountry: string;
 
   constructor(country: string) {
-    this.baseCountry = country;
+    // this.baseCountry = country || 'US';
+    this.baseCountry = country || randomize(localeSupportList);
     this.isSupported = localeSupportList.includes(this.baseCountry);
   }
 }

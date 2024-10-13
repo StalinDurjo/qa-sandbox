@@ -1,5 +1,5 @@
-import { database } from '@src/service/local-database';
-import BaseMocker from '../../base-mocker';
+import { database } from '@src/service/database';
+import BaseMocker from '../../base';
 import { randomize } from '@src/lib/util/util';
 
 export default class PersonModule extends BaseMocker {
@@ -24,7 +24,7 @@ export default class PersonModule extends BaseMocker {
     super(country);
   }
 
-  async loadPerson() {
+  async load() {
     try {
       if (!this.isSupported) return;
 
@@ -79,7 +79,7 @@ export default class PersonModule extends BaseMocker {
   }
 
   async ssn() {
-    // return this.isSupported ? this._ssn : this._faker[this.baseCountry]?.helpers.replaceSymbolWithNumber('###-##-####');
+    return this.isSupported ? this._ssn : this._faker[this.baseCountry]?.helpers.replaceSymbols('###-##-####');
   }
 
   async dateOfBirth() {
@@ -89,6 +89,4 @@ export default class PersonModule extends BaseMocker {
   async age() {
     return this.isSupported ? this._age : this._faker[this.baseCountry]?.number.int({ min: 18, max: 90 });
   }
-
-  // Add more methods for other person attributes as needed
 }

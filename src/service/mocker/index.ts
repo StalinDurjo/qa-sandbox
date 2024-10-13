@@ -1,4 +1,4 @@
-import { database } from '../local-database';
+import { database } from '../database';
 
 export const initializeMockData = async () => {
   const countryTable = await database.all(`SELECT * FROM country;`);

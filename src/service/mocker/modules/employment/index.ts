@@ -1,5 +1,5 @@
-import { database } from '@src/service/local-database';
-import BaseMocker from '../../base-mocker';
+import { database } from '@src/service/database';
+import BaseMocker from '../../base';
 import { randomize } from '@src/lib/util/util';
 
 export default class EmploymentModule extends BaseMocker {
@@ -16,7 +16,7 @@ export default class EmploymentModule extends BaseMocker {
     super(country);
   }
 
-  async loadEmployment() {
+  async load() {
     try {
       if (!this.isSupported) return;
 

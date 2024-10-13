@@ -1,5 +1,5 @@
-import { database } from '@src/service/local-database';
-import BaseMocker from '../../base-mocker';
+import { database } from '@src/service/database';
+import BaseMocker from '../../base';
 import { randomize } from '@src/lib/util/util';
 
 export default class LocationModule extends BaseMocker {
@@ -15,7 +15,7 @@ export default class LocationModule extends BaseMocker {
     super(country);
   }
 
-  async loadLocation() {
+  async load() {
     try {
       if (!this.isSupported) return;
 
