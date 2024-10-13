@@ -105,3 +105,8 @@ CREATE TABLE IF NOT EXISTS bank_account (
     is_primary BOOLEAN DEFAULT 0,
     FOREIGN KEY (bank_id) REFERENCES bank(id)
 );
+
+-- Counter table
+CREATE TABLE IF NOT EXISTS counter (
+    value INTEGER DEFAULT 0
+)
