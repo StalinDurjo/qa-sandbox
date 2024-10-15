@@ -5,4 +5,9 @@ actionRegistry.register({
   directory: './wordpress'
 });
 
+actionRegistry.register({
+  name: 'dokan',
+  directory: './dokan'
+});
+
 export default actionRegistry;

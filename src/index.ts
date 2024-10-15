@@ -6,6 +6,7 @@ import { initializeDatabase } from './service/database';
 import { initializeMockData } from './service/mocker';
 import { routeManager } from './server/route/route-manager';
 import { mockRegistry } from './service/mocker-request/mocker-registry';
+import Mocker from './service/mocker/mocker';
 
 (async function () {
   // start local server
@@ -17,4 +18,8 @@ import { mockRegistry } from './service/mocker-request/mocker-registry';
 
   await mockRegistry.initialize();
   routeManager.initialize();
+
+  // const mocker = await new Mocker({ locale: 'US' }).initialize();
+
+  // console.log(await mocker.location.structuredAddress());
 })();

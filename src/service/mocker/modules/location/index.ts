@@ -82,4 +82,44 @@ export default class LocationModule extends BaseMocker {
       ? `${this._streetAddress}, ${this._city}, ${this._postcode}, ${this.baseCountry}`
       : this._faker[this.baseCountry]?.location.streetAddress({ useFullAddress: true });
   }
+
+  async structuredAddress() {
+    let queryData: unknown[];
+
+    if (this.isSupported) {
+      queryData = randomize(
+        await database.all(`
+        SELECT 
+          address.street_address AS streetAddress,
+          address.city,
+          post_code.code AS postCode,
+          subdivision.name AS subdivision,
+          division.name AS division,
+          country.name AS country,
+          country.alpha2 AS alpha2
+        FROM
+          address
+        JOIN
+          post_code ON address.post_code = post_code.code
+        JOIN
+          subdivision ON address.subdivision_id = subdivision.id
+        JOIN
+          division ON address.division_id = division.id
+        JOIN
+          country ON address.country_alpha2 = country.alpha2
+        WHERE
+          country.alpha2 = '${this.baseCountry}';
+      `)
+      );
+    } else {
+      return {
+        message: `Locale '${this.baseCountry}' not supported for this request.`
+      };
+    }
+
+    return {
+      ...queryData,
+      fullAddress: `${queryData['streetAddress']}, ${queryData['city']}, ${queryData['postCode']}, ${queryData['division']}, ${queryData['country']}`
+    };
+  }
 }
