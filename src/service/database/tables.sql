@@ -64,13 +64,13 @@ CREATE TABLE IF NOT EXISTS person (
     blood_type TEXT,
     eye_color TEXT,
     hair_color TEXT,
+    gender TEXT CHECK(gender IN ('male', 'female')),
     FOREIGN KEY (country_alpha2) REFERENCES country(alpha2)
 );
 
 -- Employment Data table
 CREATE TABLE IF NOT EXISTS employment (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
     company TEXT NOT NULL,
     job_title TEXT NOT NULL,
     occcupation TEXT NOT NULL,
@@ -93,7 +93,6 @@ CREATE TABLE IF NOT EXISTS bank (
 -- Bank Account table
 CREATE TABLE IF NOT EXISTS bank_account (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
     bank_id INTEGER NOT NULL,
     account_type TEXT NOT NULL,
     currency TEXT NOT NULL,
