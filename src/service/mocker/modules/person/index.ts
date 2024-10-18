@@ -89,4 +89,17 @@ export default class PersonModule extends BaseMocker {
   async age() {
     return this.isSupported ? this._age : this._faker[this.baseCountry]?.number.int({ min: 18, max: 90 });
   }
+
+  async fullPersonDetails() {
+    return {
+      first_name: await this.firstName(),
+      last_name: await this.lastName(),
+      email: await this.email(),
+      phone_number: await this.phoneNumber(),
+      nationality: await this.nationality(),
+      ssn: await this.ssn(),
+      date_of_birth: await this.dateOfBirth(),
+      age: await this.age()
+    };
+  }
 }

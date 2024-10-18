@@ -5,6 +5,7 @@ import { randomize } from '@src/lib/util/util';
 export default class BankAccountModule extends BaseMocker {
   private _accountData: Promise<unknown>;
 
+  private _bankName: string;
   private _accountType: string;
   private _currency: string;
   private _accountNumber: string;
@@ -22,7 +23,7 @@ export default class BankAccountModule extends BaseMocker {
       if (!this.isSupported) return;
 
       const query = `
-        SELECT account_type, currency, account_number, routing_number, iban, sort_code, bsb_number
+        SELECT account_type, currency, account_number, routing_number, iban, sort_code, bsb_number, bank.name AS bank_name
         FROM bank_account
         JOIN bank ON bank_account.bank_id = bank.id
         WHERE bank.country_alpha2 = '${this.baseCountry}';
@@ -30,6 +31,7 @@ export default class BankAccountModule extends BaseMocker {
 
       this._accountData = randomize(await database.all(query));
 
+      this._bankName = this._accountData['bank_name'];
       this._accountType = this._accountData['account_type'];
       this._currency = this._accountData['currency'];
       this._accountNumber = this._accountData['account_number'];
@@ -43,6 +45,10 @@ export default class BankAccountModule extends BaseMocker {
       console.error(`Error fetching bank account data for ${this.baseCountry}:`, error);
       return;
     }
+  }
+
+  async bankName() {
+    return this.isSupported ? this._bankName : this._faker[this.baseCountry]?.company.name();
   }
 
   async accountType() {
@@ -71,5 +77,18 @@ export default class BankAccountModule extends BaseMocker {
 
   async bsbNumber() {
     return this.isSupported ? this._bsbNumber : this._faker[this.baseCountry]?.finance.pin(6);
+  }
+
+  async fullBankDetails() {
+    return {
+      bank_name: await this.bankName(),
+      account_type: await this.accountType(),
+      currency: await this.currency(),
+      account_number: await this.accountNumber(),
+      routing_number: await this.routingNumber(),
+      iban: await this.iban(),
+      sort_code: await this.sortCode(),
+      bsb_number: await this.bsbNumber()
+    };
   }
 }

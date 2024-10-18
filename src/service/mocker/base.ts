@@ -14,7 +14,6 @@ export default class BaseMocker {
   protected baseCountry: string;
 
   constructor(country: string) {
-    // this.baseCountry = country || 'US';
     this.baseCountry = country || randomize(localeSupportList);
     this.isSupported = localeSupportList.includes(this.baseCountry);
   }

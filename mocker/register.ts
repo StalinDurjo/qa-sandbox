@@ -1,6 +1,6 @@
-import { mockRegistry } from '@src/service/mocker-request/mocker-registry';
+import { mockerRegistry } from '@src/service/mocker-request/mocker-registry';
 
-mockRegistry.register({ directory: './dokan' });
-mockRegistry.register({ directory: './default' });
+mockerRegistry.register({ directory: './dokan' });
+mockerRegistry.register({ directory: './default' });
 
-export default mockRegistry;
+export default mockerRegistry;

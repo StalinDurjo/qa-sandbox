@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { routeManager } from '@src/server/route/route-manager';
+import { dynamicRouter } from '@src/server/route/dynamic-router';
 import Mocker from '../mocker/mocker';
 import { randomize } from '@src/lib/util/util';
 import { localeSupportList } from '@src/constant';
@@ -22,7 +22,7 @@ export default class MockerProject {
   }
 
   async addMethod({ endpoint }: { endpoint: string }, callback: (data: MockerData) => Promise<unknown>): Promise<void> {
-    routeManager.addDynamicRoute('post', `/mocker/${this.projectName}${endpoint}`, async (req: Request, res: Response) => {
+    dynamicRouter.addRoute('post', `/mocker${this.projectName == 'default' ? '' : '/' + this.projectName}${endpoint}`, async (req: Request, res: Response) => {
       const _locale = req.body;
       const mocker = await new Mocker({ locale: _locale.locale || randomize(localeSupportList) }).initialize();
 

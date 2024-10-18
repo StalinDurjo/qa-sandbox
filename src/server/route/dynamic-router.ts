@@ -9,7 +9,7 @@ interface RouteConfig {
   handler: (req: Request, res: Response) => void;
 }
 
-class RouteManager {
+class DynamicRouter {
   private dynamicRouteList: RouteConfig[] = [];
   private router: Router;
 
@@ -17,7 +17,7 @@ class RouteManager {
     this.router = router;
   }
 
-  addDynamicRoute(httpMethod: HttpMethod, endpoint: string, callback: (req: Request, res: Response) => void): void {
+  addRoute(httpMethod: HttpMethod, endpoint: string, callback: (req: Request, res: Response) => void): void {
     this.dynamicRouteList.push({
       method: httpMethod,
       path: endpoint,
@@ -39,4 +39,4 @@ class RouteManager {
   }
 }
 
-export const routeManager = new RouteManager();
+export const dynamicRouter = new DynamicRouter();

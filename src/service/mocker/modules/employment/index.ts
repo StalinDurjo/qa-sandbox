@@ -22,9 +22,7 @@ export default class EmploymentModule extends BaseMocker {
 
       const query = `
         SELECT e.*
-        FROM employment e
-        JOIN person p ON e.user_id = p.id
-        WHERE p.country_alpha2 = '${this.baseCountry}';
+        FROM employment e;
       `;
 
       this._employmentData = randomize(await database.all(query));
@@ -65,5 +63,16 @@ export default class EmploymentModule extends BaseMocker {
 
   async isCurrentJob() {
     return this.isSupported ? this._isCurrentJob : this._faker[this.baseCountry]?.datatype.boolean();
+  }
+
+  async fullEmploymentDetails() {
+    return {
+      company: await this.company(),
+      job_title: await this.jobTitle(),
+      occcupation: await this.occupation(),
+      start_date: await this.startDate(),
+      end_date: await this.endDate(),
+      is_current_job: await this.isCurrentJob()
+    };
   }
 }

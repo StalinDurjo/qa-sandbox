@@ -4,17 +4,18 @@ import '../actions/register';
 import '../mocker/register';
 import { initializeDatabase } from './service/database';
 import { initializeMockData } from './service/mocker';
-import { routeManager } from './server/route/route-manager';
-import { mockRegistry } from './service/mocker-request/mocker-registry';
+import { dynamicRouter } from './server/route/dynamic-router';
+import { mockerRegistry } from './service/mocker-request/mocker-registry';
 
-(async function () {
+(async () => {
   // start local server
   await initServer();
   // create database and its tables
   await initializeDatabase();
   // populate database with mock data
   await initializeMockData();
-
-  await mockRegistry.initialize();
-  routeManager.initialize();
+  // initialize mocker projects
+  await mockerRegistry.initialize();
+  // initialize the creation of dynamic routes
+  dynamicRouter.initialize();
 })();
