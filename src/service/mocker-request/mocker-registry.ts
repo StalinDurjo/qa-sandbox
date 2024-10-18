@@ -34,4 +34,4 @@ class MockerRegistry {
   }
 }
 
-export const mockRegistry = new MockerRegistry();
+export const mockerRegistry = new MockerRegistry();
