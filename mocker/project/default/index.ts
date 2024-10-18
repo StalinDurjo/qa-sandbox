@@ -2,28 +2,25 @@ import MockerProject from '@src/service/mocker-request/mocker-project';
 
 const project = new MockerProject({ projectName: 'default' });
 
-project.addMethod({ endpoint: '/generate-data' }, async (data) => {
-  const mock = {};
-  mock['firstName'] = await data.mocker.person.firstName();
-  mock['lastName'] = await data.mocker.person.lastName();
-  mock['lastEmail'] = await data.mocker.person.email();
-  mock['phoneNumber'] = await data.mocker.person.phoneNumber();
-  mock['nationality'] = await data.mocker.person.nationality();
-  mock['dateOfBirth'] = await data.mocker.person.dateOfBirth();
-  mock['age'] = await data.mocker.person.age();
+project.addMethod({ endpoint: '/bank-details' }, async (data) => {
+  return {
+    ...((await data.mocker.bankAccount.fullBankDetails()) as Object)
+  };
+});
 
-  mock['country'] = await data.mocker.location.countryName();
-  mock['division'] = await data.mocker.location.division();
-  mock['subdivision'] = await data.mocker.location.subdivision();
-  mock['city'] = await data.mocker.location.city();
-  mock['streetAddress'] = await data.mocker.location.streetAddress();
-  mock['postCode'] = await data.mocker.location.postcode();
-  mock['fullAddress'] = await data.mocker.location.fullAddress();
+project.addMethod({ endpoint: '/user-details' }, async (data) => {
+  return {
+    ...((await data.mocker.person.fullPersonDetails()) as Object)
+  };
+});
 
-  mock['bankAccountType'] = await data.mocker.bankAccount.accountType();
-  mock['bankCurrency'] = await data.mocker.bankAccount.currency();
-
-  return mock;
+project.addMethod({ endpoint: '/full-user-details' }, async (data) => {
+  return {
+    ...((await data.mocker.person.fullPersonDetails()) as Object),
+    ...((await data.mocker.location.structuredAddress()) as Object),
+    ...((await data.mocker.employment.fullEmploymentDetails()) as Object),
+    ...((await data.mocker.bankAccount.fullBankDetails()) as Object)
+  };
 });
 
 export default project;
