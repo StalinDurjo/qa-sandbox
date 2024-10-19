@@ -37,7 +37,7 @@ export default class Action {
     }
   }
 
-  async loadActionSteps({ project }: { project: string }) {
+  async loadStepMethods({ project }: { project: string }) {
     try {
       const actions = (await this.importAsObjectList()).filter((data) => data.project === project);
       const [properties] = actions.map((data) => {
@@ -52,17 +52,25 @@ export default class Action {
     }
   }
 
-  async runAction(_object: unknown, { project, actionName }) {
+  async run(_object: unknown, { project, actionName }) {
     const [actions] = this.actionScriptLoader.loadScript({ project, actionName });
 
     for (const actionStep of actions.actionSteps) {
-      const action = (await this.loadActionSteps({ project })).find((data) => data.name === actionStep);
+      const action = (await this.loadStepMethods({ project })).find((data) => this.getStepName(data) === actionStep);
 
-      if (action?.name === actionStep) {
+      if (this.getStepName(action) === actionStep) {
         const [parameterObject] = this.actionScriptLoader.loadParameter().filter((obj) => obj._function === actionStep && obj.project === project && obj.actionName === actionName);
 
-        await action(_object, { ...parameterObject.parameter });
+        await action(null, _object, { ...parameterObject.parameter });
       }
+    }
+  }
+
+  private getStepName(actionStep: Function) {
+    if (typeof actionStep === 'function') {
+      const params = actionStep.toString().match(/\(([^)]*)\)/)[1];
+      const regex = /actionStepName=['"`]([^'"`]+)['"`]/;
+      return params?.match(regex)?.[1];
     }
   }
 }
