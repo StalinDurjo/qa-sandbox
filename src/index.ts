@@ -1,6 +1,6 @@
 import '@testConfig';
 import { initServer } from './server/server';
-import '../actions/register';
+import '../includes/actions/register';
 import '../mocker/register';
 import { initializeDatabase } from './service/database';
 import { initializeMockData } from './service/mocker';

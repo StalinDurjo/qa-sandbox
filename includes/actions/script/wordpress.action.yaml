@@ -4,9 +4,9 @@ actions:
     actionType: 'e2e'
     repeat: 2
     actionSteps:
-      - 'loginToAdmin'
-      - 'changePermalink'
-      - 'clickOnSaveChanges'
+      - 'login-to-admin'
+      - 'change-permalink'
+      - 'click-on-save-changes'
     parameter:
       - username: 'admin'
         password: 'admin@email.com'
@@ -16,6 +16,6 @@ actions:
     actionType: 'api'
     repeat: 1
     actionSteps:
-      - 'loginToAdmin'
-      - 'changeAnyoneCanRegister'
-      - 'clickOnSaveChanges'
+      - 'login-to-admin'
+      - 'change-anyone-can-register'
+      - 'click-on-save-changes'

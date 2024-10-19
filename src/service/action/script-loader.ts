@@ -23,7 +23,7 @@ export default class ActionScriptLoader {
   private searchPath: string;
 
   constructor() {
-    this.searchPath = path.join(path.resolve(process.cwd()) + '/actions/script');
+    this.searchPath = path.join(path.resolve(process.cwd()) + '/includes/actions/script');
     this.fileLoader = new FileLoader({ prefix: this.prefix, searchDirectory: this.searchPath });
   }
 

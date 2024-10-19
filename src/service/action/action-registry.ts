@@ -26,7 +26,7 @@ class ActionRegistry {
   }
 
   register({ name, directory }: ProjectInfo): void {
-    const projectDirectory = path.normalize(path.join(path.resolve(process.cwd()) + '/actions/project', directory));
+    const projectDirectory = path.normalize(path.join(path.resolve(process.cwd()) + '/includes/actions/project', directory));
     this.registeredProjectList.push({ name, directory: projectDirectory });
   }
 

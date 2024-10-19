@@ -4,25 +4,32 @@ import PermalinkSettingsPage from '@pages/woocommerce/wp-admin/settings/permalin
 import { Page } from 'playwright';
 
 export default class WordpressActionProject {
-  async loginToAdmin(page: Page, { username, password }) {
+  async loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password }) {
     const loginPage = new WpLoginPage(page);
     await page.goto('http://localhost/automation/wp-login.php');
     await loginPage.enterUsername(username);
     await loginPage.enterPassword(password);
     await loginPage.clickOnLogin();
+
+    // console.log(username);
+    // console.log('Step: loginToAdmin');
   }
 
-  async changePermalink(page: Page, { permalinkType }) {
+  async changePermalink(actionStepName = 'change-permalink', page: Page, { permalinkType }) {
     const sidebarPage = new WpAdminSidebar(page);
     const permalinkSettingsPage = new PermalinkSettingsPage(page);
 
     await sidebarPage.clickOnMenu('Settings');
     await sidebarPage.cliskOnSubMenu('Permalinks');
     await permalinkSettingsPage.selectPermalinkStructure(permalinkType);
+
+    // console.log('Step: changePermalink');
   }
 
-  async clickOnSaveChanges(page: Page) {
+  async clickOnSaveChanges(actionStepName = 'click-on-save-changes', page: Page) {
     const permalinkSettingsPage = new PermalinkSettingsPage(page);
     await permalinkSettingsPage.clickOnSaveChanges();
+
+    // console.log('Step: clickOnSaveChanges');
   }
 }
