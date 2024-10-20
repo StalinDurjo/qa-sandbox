@@ -6,6 +6,7 @@ import { initializeDatabase } from './service/database';
 import { initializeMockData } from './service/mocker';
 import { dynamicRouter } from './server/route/dynamic-router';
 import { mockerRegistry } from './service/mocker-request/mocker-registry';
+import './scheduler';
 
 (async () => {
   // start local server
