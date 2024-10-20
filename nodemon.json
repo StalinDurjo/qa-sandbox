@@ -1,5 +1,5 @@
 {
-  "watch": ["./src", "./test.config.ts", "./script", "./pages", "./mocker", "./action"],
+  "watch": ["./src", "./test.config.ts", "./pages", "./includes"],
   "ext": ".ts,.js,.mts,.mjs,.yaml",
   "exec": "npx tsx ./src/index.ts"
 }

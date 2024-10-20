@@ -7,6 +7,7 @@ import { initializeMockData } from './service/mocker';
 import { dynamicRouter } from './server/route/dynamic-router';
 import { mockerRegistry } from './service/mocker-request/mocker-registry';
 import './service/mailer/mailer';
+import './scheduler';
 
 (async () => {
   // start local server
