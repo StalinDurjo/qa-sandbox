@@ -1,7 +1,7 @@
 import '@testConfig';
 import { initServer } from './server/server';
 import '../includes/actions/register';
-import '../mocker/register';
+import '../includes/mocker/register';
 import { initializeDatabase } from './service/database';
 import { initializeMockData } from './service/mocker';
 import { dynamicRouter } from './server/route/dynamic-router';

@@ -9,7 +9,7 @@ class MockerRegistry {
   private registeredProjectList: ProjectConfig[] = [];
 
   register({ directory }: ProjectConfig): void {
-    const projectDirectory = path.normalize(path.join(path.resolve(process.cwd()) + '/mocker/project', directory));
+    const projectDirectory = path.normalize(path.join(path.resolve(process.cwd()) + '/includes/mocker/project', directory));
     this.registeredProjectList.push({ directory: projectDirectory });
   }
 
