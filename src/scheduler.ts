@@ -15,7 +15,7 @@ interface ScheduledTask extends TaskConfig {
 }
 
 export class TaskSchedulerService {
-  tasks: Map<string, ScheduledTask> = new Map();
+  private tasks: Map<string, ScheduledTask> = new Map();
   private taskQueue: string[] = [];
 
   constructor() {}
