@@ -8,6 +8,7 @@ import { dynamicRouter } from './server/route/dynamic-router';
 import { mockerRegistry } from './service/mocker-request/mocker-registry';
 import './service/mailer/mailer';
 import './scheduler';
+import updateNotifier from './service/update-notifier/update-notifier';
 
 (async () => {
   // start local server
@@ -20,4 +21,9 @@ import './scheduler';
   await mockerRegistry.initialize();
   // initialize the creation of dynamic routes
   dynamicRouter.initialize();
+
+  await updateNotifier.initialize();
+
+  // console.log(await updateNotifier.getScrapperList());
+  await updateNotifier.executeAll();
 })();

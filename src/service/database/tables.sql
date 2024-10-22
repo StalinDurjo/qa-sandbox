@@ -108,4 +108,13 @@ CREATE TABLE IF NOT EXISTS bank_account (
 -- Counter table
 CREATE TABLE IF NOT EXISTS counter (
     value INTEGER DEFAULT 0
-)
+);
+
+-- Dependency Update Notifier table
+CREATE TABLE IF NOT EXISTS dependency_update_notifier (
+    scraper_name TEXT,
+    dependency_name TEXT,
+    stored_data TEXT,
+    compare_data TEXT,
+    is_searchable INTEGER DEFAULT 1
+);
