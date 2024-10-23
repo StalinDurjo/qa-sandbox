@@ -25,5 +25,7 @@ import updateNotifier from './service/update-notifier/update-notifier';
   await updateNotifier.initialize();
 
   // console.log(await updateNotifier.getScrapperList());
-  await updateNotifier.executeAll();
+  // await updateNotifier.executeAll();
+
+  // await updateNotifier.execute('wporg', 'hello2');
 })();

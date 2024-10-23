@@ -1,4 +1,4 @@
 export default [
-  { scrapper: 'woocommerce', dependency: 'hello1' },
-  { scrapper: 'wporg', dependency: 'hello2' }
+  { scraper: 'woocommerce', dependency: 'hello1', targetUrl: 'https://wordpress.org/plugins/woocommerce/' },
+  { scraper: 'wporg', dependency: 'hello2', targetUrl: 'https://wordpress.org/plugins/woocommerce/' }
 ];
