@@ -1,11 +1,12 @@
 import { searchFiles } from '@src/lib/util/util';
 
 interface WebScraperResult {
-  currentVersion: string;
-  dep: string;
+  pluginVersion: string;
+  wordpressVersion: string;
+  phpVersion: string;
 }
 
-type WebScraperFunction = (targetDependency: string) => Promise<WebScraperResult>;
+type WebScraperFunction = (targetDependency: string, targetUrl: string) => Promise<WebScraperResult>;
 
 class DependencyUpdateNotifierScraper {
   private scrapperList: Map<string, WebScraperFunction> = new Map();

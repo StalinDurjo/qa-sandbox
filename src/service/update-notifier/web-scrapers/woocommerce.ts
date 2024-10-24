@@ -1,8 +1,9 @@
 import dependencyUpdateNotifierScraper from '../notifier-scraper';
 
-export default dependencyUpdateNotifierScraper.add('woocommerce', async (targetDependency: string) => {
+export default dependencyUpdateNotifierScraper.add('woocommerce', async (targetDependency: string, targetUrl: string) => {
   return {
-    currentVersion: '6.10.2',
-    dep: targetDependency
+    pluginVersion: '',
+    wordpressVersion: '',
+    phpVersion: ''
   };
 });

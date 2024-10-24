@@ -29,7 +29,7 @@ export class UpdateNotifier {
       `);
 
       if (isPresent.length === 0) {
-        let query = `INSERT INTO dependency_update_notifier (scraper_name, dependency_name, stored_data, compare_data, is_searchable) VALUES ('${notifier['scraper']}', '${notifier['dependency']}', '', '', 1);`;
+        let query = `INSERT INTO dependency_update_notifier (scraper_name, dependency_name, target_url, stored_data, compare_data, is_searchable) VALUES ('${notifier['scraper']}', '${notifier['dependency']}', '${notifier['targetUrl']}', '', '', 1);`;
         await database.run(query);
       }
     }
@@ -42,13 +42,13 @@ export class UpdateNotifier {
   async executeAll() {
     for (const item of notifierList) {
       const func = this.scrapperList.get(item['scraper']);
-      await func(item['dependency']);
+      await func(item['dependency'], item['targetUrl']);
     }
   }
 
-  async execute(scraper: string, dependencyName: string) {
+  async execute(scraper: string, dependencyName: string, targetUrl: string) {
     const func = this.scrapperList.get(scraper);
-    return await func(dependencyName);
+    return await func(dependencyName, targetUrl);
   }
 
   // run scraper for all the dependencies for which stored_data is empty and is_searchable is true
@@ -96,18 +96,3 @@ export class UpdateNotifier {
 
 const updateNotifier = new UpdateNotifier();
 export default updateNotifier;
-
-// version
-// wordpress version
-// php version
-
-// scrapper name
-// dependency name
-// previous
-// current
-
-/*
-IF no data, THEN run scraper AND add data
-==> data added to `data`
-
-*/
