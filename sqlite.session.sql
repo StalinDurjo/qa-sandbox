@@ -12,3 +12,10 @@ SELECT * FROM dependency_version_tracker;
 -- DROP TABLE country;
 -- DROP TABLE counter;
 
+
+-- UPDATE dependency_version_tracker SET is_searchable = 1 WHERE dependency_name = 'WooCommerce';
+
+-- UPDATE dependency_version_tracker SET compare_data = null WHERE dependency_name = 'WooCommerce';
+
+-- WooCommerce
+-- Contact Form 7

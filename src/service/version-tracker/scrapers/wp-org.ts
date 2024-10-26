@@ -2,6 +2,7 @@ import { chromium } from 'playwright';
 import { DependencyVersion, WebScraperLoader } from '../scraper-loader';
 
 export async function wporgScraper(targetDependency: string, targetUrl: string): Promise<DependencyVersion> {
+  console.log('Running.');
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
   const page = await context.newPage();

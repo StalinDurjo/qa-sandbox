@@ -49,4 +49,40 @@ export class DependencyDatabaseQueries {
       [data, scraper, dependency]
     );
   }
+
+  async updateCompareData(scraper: string, dependency: string, data: string): Promise<void> {
+    await database.run(
+      `
+      UPDATE dependency_version_tracker
+      SET compare_data = ?
+      WHERE scraper_name = ? AND dependency_name = ?
+    `,
+      [data, scraper, dependency]
+    );
+  }
+
+  async moveCompareToStored(scraper: string, dependency: string): Promise<void> {
+    await database.run(
+      `
+      UPDATE dependency_version_tracker
+      SET stored_data = compare_data,
+          compare_data = ''
+      WHERE scraper_name = ? 
+      AND dependency_name = ? 
+      AND is_searchable = 1
+    `,
+      [scraper, dependency]
+    );
+  }
+
+  async updateIsSearchable(scraper: string, dependency: string, setIsSearchable: string): Promise<void> {
+    await database.run(
+      `
+      UPDATE dependency_version_tracker
+      SET is_searchable = ?
+      WHERE scraper_name = ? AND dependency_name = ?
+    `,
+      [setIsSearchable, scraper, dependency]
+    );
+  }
 }
