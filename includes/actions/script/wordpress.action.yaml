@@ -1,21 +1,43 @@
 project: 'wordpress'
-actions:
-  - actionName: 'Change permalink'
-    actionType: 'e2e'
-    repeat: 2
-    actionSteps:
-      - 'login-to-admin'
-      - 'change-permalink'
-      - 'click-on-save-changes'
-    parameter:
-      - username: 'admin'
-        password: 'admin@email.com'
-      - permalinkType: 'Post name'
 
-  - actionName: 'Set anyone can register'
-    actionType: 'api'
+credentials: &auth_params
+  username: 'admin'
+  password: 'admin@email.com'
+
+actions:
+  - actionName: 'Wordpress Site Setup'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'select-setup-language'
+      - 'setup-wordpress-database'
+      - 'setup-wordpress-admin-site'
+    parameter:
+      - language: 'English (United States)'
+      - databaseName: 'testing4'
+        username: 'root'
+        password: 'admin'
+        tablePrefix: '_wp'
+      - siteTitle: 'Testing Site Title'
+        username: 'admin'
+        password: 'admin@email.com'
+        email: 'admin@email.com'
+
+  - actionName: 'Set Anyone Can Register'
+    actionType: 'UI'
     repeat: 1
     actionSteps:
       - 'login-to-admin'
-      - 'change-anyone-can-register'
-      - 'click-on-save-changes'
+      - 'set-on-anyone-can-register'
+    parameter:
+      - *auth_params
+
+  - actionName: 'Change Permalink'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'change-permalink'
+    parameter:
+      - *auth_params
+      - permalinkType: 'Post name'
