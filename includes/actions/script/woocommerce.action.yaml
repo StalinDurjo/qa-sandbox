@@ -1,0 +1,42 @@
+project: 'woocommerce'
+
+credentials: &auth_params
+  username: 'admin'
+  password: 'admin@email.com'
+
+actions:
+  - actionName: 'Install Storefront Theme'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'install-and-activate-storefront-theme'
+    parameter:
+      - *auth_params
+
+  - actionName: 'Install WooCommerce Plugin'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'install-and-activate-woocommerce-plugin'
+    parameter:
+      - *auth_params
+
+  - actionName: 'WooCommerce Disable Send Password Setup Link'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'disable-send-password-setup-link'
+    parameter:
+      - *auth_params
+
+  - actionName: 'WooCommerce Enable Tax Rates'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'enable-tax-rates'
+    parameter:
+      - *auth_params

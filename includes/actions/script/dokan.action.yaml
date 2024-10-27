@@ -1,0 +1,13 @@
+project: 'dokan'
+actions:
+  - actionName: 'Change permalink'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'change-permalink'
+      - 'click-on-save-changes'
+    parameter:
+      - username: 'admin'
+        password: 'admin@email.com'
+      - permalinkType: 'Post name'

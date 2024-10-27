@@ -9,3 +9,8 @@ actionRegistry.register({
   name: 'dokan',
   directory: './dokan'
 });
+
+actionRegistry.register({
+  name: 'woocommerce',
+  directory: './woocommerce'
+});

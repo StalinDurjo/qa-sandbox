@@ -12,7 +12,9 @@ export default class WpBasePage {
   }
 
   submit(title: string) {
-    return this.page.locator('#submit').and(this.page.getByText(title));
+    // return this.page.locator('#submit').and(this.page.getByText(title));
+    //button[@type="submit"]
+    return this.page.locator(`//*[@type="submit"]`).and(this.page.getByText(title));
   }
 
   pageTitleAction(title: string) {
@@ -20,6 +22,10 @@ export default class WpBasePage {
   }
 
   async clickOnSaveChanges() {
-    await this.submit('Save Changes').click();
+    if (await this.submit('Save Changes').isEnabled()) {
+      await this.submit('Save Changes').click();
+    }
   }
+
+  async;
 }

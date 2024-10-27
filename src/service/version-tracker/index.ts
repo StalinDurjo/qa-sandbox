@@ -10,7 +10,7 @@ scheduler.scheduleTask({
   name: 'run-tracker-for-unstored-dependencies',
   schedule: '0 */15 * * * *', // runs every 15 minute
   function: async () => {
-    console.log('executed');
+    console.log(`Task: 'run-tracker-for-unstored-dependencies' is running.`);
     await versionTracker.processUnstoredDependencies();
   }
 });
@@ -19,6 +19,7 @@ scheduler.scheduleTask({
   name: 'run-version-tracker',
   schedule: '0 */25 * * * *', // runs every 25 minute
   function: async () => {
+    console.log(`Task: 'run-version-tracker' is running.`);
     await versionTracker.executeAllTrackers();
 
     const records = await versionTracker.database.getAllDependencyRecords();
