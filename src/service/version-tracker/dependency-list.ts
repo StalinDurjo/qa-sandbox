@@ -19,5 +19,25 @@ export const dependencies: DependencyConfig[] = [
     scraper: 'wp-org',
     dependency: 'Contact Form 7',
     targetUrl: 'https://wordpress.org/plugins/contact-form-7/'
+  },
+  {
+    scraper: 'wp-org',
+    dependency: 'Dokan Lite',
+    targetUrl: 'https://wordpress.org/plugins/dokan-lite/'
+  },
+  {
+    scraper: 'wp-org',
+    dependency: 'Dokan WPML',
+    targetUrl: 'https://wordpress.org/plugins/dokan-wpml/'
+  },
+  {
+    scraper: 'wp-org',
+    dependency: 'Dokan Invoice',
+    targetUrl: 'https://wordpress.org/plugins/dokan-invoice/'
+  },
+  {
+    scraper: 'wp-org',
+    dependency: 'PDF Invoices & Packing Slips for WooCommerce',
+    targetUrl: 'https://wordpress.org/plugins/woocommerce-pdf-invoices-packing-slips/'
   }
 ];
