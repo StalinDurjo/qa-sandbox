@@ -11,6 +11,16 @@ export const dependencies: DependencyConfig[] = [
     targetUrl: 'https://woocommerce.com/products/stripe/'
   },
   {
+    scraper: 'woocommerce',
+    dependency: 'Product Add-Ons for WooCommercee',
+    targetUrl: 'https://woocommerce.com/products/product-add-ons/'
+  },
+  {
+    scraper: 'woocommerce',
+    dependency: 'WooCommerce Bookings',
+    targetUrl: 'https://woocommerce.com/products/woocommerce-bookings/'
+  },
+  {
     scraper: 'wp-org',
     dependency: 'WooCommerce',
     targetUrl: 'https://wordpress.org/plugins/woocommerce/'
