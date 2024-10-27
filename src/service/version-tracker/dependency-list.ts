@@ -12,7 +12,7 @@ export const dependencies: DependencyConfig[] = [
   },
   {
     scraper: 'woocommerce',
-    dependency: 'Product Add-Ons for WooCommercee',
+    dependency: 'Product Add-Ons for WooCommerce',
     targetUrl: 'https://woocommerce.com/products/product-add-ons/'
   },
   {
