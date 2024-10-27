@@ -8,7 +8,6 @@ import { dynamicRouter } from './server/route/dynamic-router';
 import { mockerRegistry } from './service/mocker-request/mocker-registry';
 import './service/mailer/mailer';
 import './scheduler';
-import updateNotifier from './service/update-notifier/update-notifier';
 import { versionTracker } from './service/version-tracker';
 import ActionScriptLoader from './service/action/script-loader';
 
@@ -24,7 +23,6 @@ import ActionScriptLoader from './service/action/script-loader';
   // initialize the creation of dynamic routes
   dynamicRouter.initialize();
 
-  await updateNotifier.initialize();
   await versionTracker.initialize();
 
   // const actionScriptLoader = new ActionScriptLoader();
