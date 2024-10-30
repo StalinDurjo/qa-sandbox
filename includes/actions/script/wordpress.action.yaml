@@ -2,7 +2,7 @@ project: 'wordpress'
 
 credentials: &auth_params
   username: 'admin'
-  password: 'admin@email.com'
+  password: '01Testing01!'
 
 actions:
   - actionName: 'Wordpress Site Setup'
@@ -14,13 +14,13 @@ actions:
       - 'setup-wordpress-admin-site'
     parameter:
       - language: 'English (United States)'
-      - databaseName: 'testing4'
+      - databaseName: 'testing1'
         username: 'root'
         password: 'admin'
         tablePrefix: '_wp'
-      - siteTitle: 'Testing Site Title'
+      - siteTitle: 'Testing Site'
         username: 'admin'
-        password: 'admin@email.com'
+        password: '01Testing01!'
         email: 'admin@email.com'
 
   - actionName: 'Set Anyone Can Register'
