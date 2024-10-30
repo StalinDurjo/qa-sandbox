@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { runSingleAction } from '../controller/action-controller';
+import { runMultipleAction, runSingleAction } from '../controller/action-controller';
 const router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {
@@ -7,5 +7,6 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.post('/run-action', runSingleAction);
+router.post('/run-multiple-action', runMultipleAction);
 
 export default router;

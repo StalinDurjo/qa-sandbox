@@ -14,7 +14,7 @@ actions:
       - 'setup-wordpress-admin-site'
     parameter:
       - language: 'English (United States)'
-      - databaseName: 'testing4'
+      - databaseName: 'testing1'
         username: 'root'
         password: 'admin'
         tablePrefix: '_wp'
