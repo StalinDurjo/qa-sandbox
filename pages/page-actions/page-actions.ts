@@ -1,12 +1,22 @@
 import WpBasePage from '@pages/base/wp-base.page';
+import WpLoginPage from '@pages/woocommerce/wp-admin/auth/login.page';
 import AddNewPluginPage from '@pages/wordpress/wp-admin/plugins/add-new-plugin.page';
 import { Page } from 'playwright';
 
 export default class PageActions {
   private page: Page;
+  private loginPage: WpLoginPage;
 
   constructor(page: Page) {
     this.page = page;
+    this.loginPage = new WpLoginPage(this.page);
+  }
+
+  async loginToAdmin(baseUrl: string, { username, password }: { username: string; password: string }) {
+    await this.page.goto(baseUrl + '/wp-login.php');
+    await this.loginPage.enterUsername(username);
+    await this.loginPage.enterPassword(password);
+    await this.loginPage.clickOnLogin();
   }
 
   async installWordpressPlugin({ baseUrl, pluginName, pluginProvider, activate = false }: { baseUrl: string; pluginName: string; pluginProvider: string; activate?: boolean }) {

@@ -9,11 +9,13 @@ import { Page } from 'playwright';
 const baseUrl = process.env.ACTION_PROJECT_BASE_URL;
 export default class WordpressActionProject {
   async loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password }) {
-    const loginPage = new WpLoginPage(page);
-    await page.goto(baseUrl + '/wp-login.php');
-    await loginPage.enterUsername(username);
-    await loginPage.enterPassword(password);
-    await loginPage.clickOnLogin();
+    // const loginPage = new WpLoginPage(page);
+    // await page.goto(baseUrl + '/wp-login.php');
+    // await loginPage.enterUsername(username);
+    // await loginPage.enterPassword(password);
+    // await loginPage.clickOnLogin();
+    const pageActions = new PageActions(page);
+    await pageActions.loginToAdmin(baseUrl + '/wp-login.php', { username, password });
   }
 
   async selectSetupLanguage(actionStepName = 'select-setup-language', page: Page, { language = 'English (United States)' }) {
