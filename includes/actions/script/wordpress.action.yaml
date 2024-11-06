@@ -14,11 +14,10 @@ actions:
       - 'setup-wordpress-admin-site'
     parameter:
       - language: 'English (United States)'
-      - databaseName: 'testing1'
+      - databaseName: 'wpml'
         username: 'root'
         password: 'admin'
-        tablePrefix: '_wp'
-      - siteTitle: 'Testing Site'
+      - siteTitle: 'Testing Site Title'
         username: 'admin'
         password: '01Testing01!'
         email: 'admin@email.com'
