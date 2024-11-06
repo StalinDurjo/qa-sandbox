@@ -30,7 +30,7 @@ export default class WordpressActionProject {
     }
   }
 
-  async wordpressDatabaseSetup(actionStepName = 'setup-wordpress-database', page: Page, { databaseName, username, password, tablePrefix }) {
+  async wordpressDatabaseSetup(actionStepName = 'setup-wordpress-database', page: Page, { databaseName, username, password }) {
     const wordpressSetupPage = new WordpressSetupPage(page);
 
     // database name input field is used as an indicator to see if this page is visible
@@ -39,7 +39,7 @@ export default class WordpressActionProject {
       await wordpressSetupPage.enterDatabaseName(databaseName);
       await wordpressSetupPage.enterDatabaseUsername(username);
       await wordpressSetupPage.enterDatabasePassword(password);
-      await wordpressSetupPage.enterDatabasePrefix(tablePrefix);
+      // await wordpressSetupPage.enterDatabasePrefix(tablePrefix);
       await page.keyboard.press('Enter');
     }
 
