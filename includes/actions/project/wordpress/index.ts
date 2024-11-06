@@ -1,6 +1,8 @@
+import PageActions from '@pages/page-actions/page-actions';
 import WpLoginPage from '@pages/woocommerce/wp-admin/auth/login.page';
 import PermalinkSettingsPage from '@pages/woocommerce/wp-admin/settings/permalink-settings.page';
 import WordpressSetupPage from '@pages/wordpress/wordpress-setup.page';
+import AddNewPluginPage from '@pages/wordpress/wp-admin/plugins/add-new-plugin.page';
 import WpGeneralSettingsPage from '@pages/wordpress/wp-admin/settings/general-settings.page';
 import { Page } from 'playwright';
 
@@ -90,5 +92,25 @@ export default class WordpressActionProject {
     await page.goto(baseUrl + '/wp-admin/options-general.php');
     await generalSettingsPage.clickOnSetAnyoneCanRegister();
     await generalSettingsPage.submit('Save Changes').click();
+  }
+
+  async installAndActivateEmailLogPlugin(actionStepName = 'install-and-activate-email-log-plugin', page: Page) {
+    const pageActions = new PageActions(page);
+    await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'Email Log', pluginProvider: 'Sudar', activate: true });
+  }
+
+  async installPDFInvoicePlugin(actionStepName = 'install-pdf-invoice-and-packing-plugin', page: Page) {
+    const pageActions = new PageActions(page);
+    await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'PDF Invoices & Packing Slips for WooCommerce', pluginProvider: 'WP Overnight' });
+  }
+
+  async installAndActivateWpConsolePlugin(actionStepName = 'install-and-activate-wp-console-plugin', page: Page) {
+    const pageActions = new PageActions(page);
+    await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'WP Console – WordPress PHP Console powered by PsySH', pluginProvider: 'Edi Amin', activate: true });
+  }
+
+  async installDokanInvoicePlugin(actionStepName = 'install-dokan-invoice-plugin', page: Page) {
+    const pageActions = new PageActions(page);
+    await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'WP Console – WordPress PHP Console powered by PsySH', pluginProvider: 'Edi Amin' });
   }
 }

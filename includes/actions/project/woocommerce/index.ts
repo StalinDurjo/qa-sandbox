@@ -1,3 +1,4 @@
+import PageActions from '@pages/page-actions/page-actions';
 import WpLoginPage from '@pages/woocommerce/wp-admin/auth/login.page';
 import WoocommerceAccountsPrivacyPage from '@pages/woocommerce/wp-admin/woocommerce/settings/accounts-privacy.page';
 import WoocommerceGeneralSettingsPage from '@pages/woocommerce/wp-admin/woocommerce/settings/general.page';
@@ -32,28 +33,8 @@ export default class WoocommerceActionProject {
   }
 
   async installAndActivateWoocommercePlugin(actionStepName = 'install-and-activate-woocommerce-plugin', page: Page) {
-    page.setDefaultTimeout(60 * 10000);
-
-    const pluginName = 'WooCommerce';
-    const providerName = 'Automattic';
-
-    const addNewPluginPage = new AddNewPluginPage(page);
-    await page.goto(`${baseUrl}/wp-admin/plugin-install.php`);
-    await addNewPluginPage.searchPlugin(pluginName);
-
-    await page.waitForSelector('.spinner'); // wait for spinner to be visible
-    await page.waitForSelector('.spinner', { state: 'hidden' }); // wait for spinner to be not visible
-
-    // if install now button is visible, then install and activate the plugin
-    if (await addNewPluginPage.pluginInstallNowButton(pluginName, providerName).isVisible()) {
-      await addNewPluginPage.clickOnInstallNowButton(pluginName, providerName);
-      await addNewPluginPage.clickOnActivateButton(pluginName, providerName);
-
-      // if activate button is visible, that means plugin is already installed
-      // in that case, activate the plugin
-    } else if (await addNewPluginPage.pluginActivatewButton(pluginName, providerName).isVisible()) {
-      await addNewPluginPage.clickOnActivateButton(pluginName, providerName);
-    }
+    const pageActions = new PageActions(page);
+    await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'WooCommerce', pluginProvider: 'Automattic', activate: true });
   }
 
   async disableSendPasswordSetupLink(actionStepName = 'disable-send-password-setup-link', page: Page) {

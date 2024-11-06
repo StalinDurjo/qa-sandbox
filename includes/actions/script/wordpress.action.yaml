@@ -14,7 +14,7 @@ actions:
       - 'setup-wordpress-admin-site'
     parameter:
       - language: 'English (United States)'
-      - databaseName: 'wpml'
+      - databaseName: 'testing1'
         username: 'root'
         password: 'admin'
       - siteTitle: 'Testing Site Title'
@@ -40,3 +40,39 @@ actions:
     parameter:
       - *auth_params
       - permalinkType: 'Post name'
+
+  - actionName: 'Install Email Log Plugin'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'install-and-activate-email-log-plugin'
+    parameter:
+      - *auth_params
+
+  - actionName: 'Install PDF Invoices & Packing Slips for WooCommerce Plugin'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'install-pdf-invoice-and-packing-plugin'
+    parameter:
+      - *auth_params
+
+  - actionName: 'Install and Activate WP Console Plugin'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'install-and-activate-wp-console-plugin'
+    parameter:
+      - *auth_params
+
+  - actionName: 'Install Dokan Invoice Plugin'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'install-dokan-invoice-plugin'
+    parameter:
+      - *auth_params
