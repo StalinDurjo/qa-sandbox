@@ -129,3 +129,8 @@ CREATE TABLE IF NOT EXISTS dependency_version_tracker (
     compare_data TEXT DEFAULT '',
     is_searchable INTEGER DEFAULT 1
 );
+
+-- Options table
+CREATE TABLE IF NOT EXISTS options (
+    action_project_base_url TEXT
+);
