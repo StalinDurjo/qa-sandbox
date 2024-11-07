@@ -7,6 +7,7 @@ SELECT * FROM counter;
 SELECT * FROM dependency_update_notifier;
 
 SELECT * FROM dependency_version_tracker;
+SELECT * FROM options;
 
 -- DROP TABLE division;
 -- DROP TABLE country;
