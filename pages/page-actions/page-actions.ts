@@ -12,8 +12,7 @@ export default class PageActions {
     this.loginPage = new WpLoginPage(this.page);
   }
 
-  async loginToAdmin(baseUrl: string, { username, password }: { username: string; password: string }) {
-    await this.page.goto(baseUrl + '/wp-login.php');
+  async loginToAdmin({ username, password }: { username: string; password: string }) {
     await this.loginPage.enterUsername(username);
     await this.loginPage.enterPassword(password);
     await this.loginPage.clickOnLogin();
