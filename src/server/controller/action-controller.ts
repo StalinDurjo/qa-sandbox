@@ -16,13 +16,15 @@ export const runSingleAction = async (req: Request, res: Response) => {
       ? requestBody['repeat']
       : actionScript.loadScript({ project: requestBody['project'], actionName: requestBody['actionName'] })[0]['repeat'];
 
+    const actionType = requestBody['actionType'] ? requestBody['actionType'] : 'UI';
+
     for (let i = 0; i < repeatAction; i++) {
-      if (requestBody['actionType'] === 'UI') {
+      if (actionType === 'UI') {
         const browser = new BrowserUtil();
         const page = await browser.createInstance();
         await action.run(page, { ...requestBody });
         await browser.closeInstance();
-      } else if (requestBody['actionType'] === 'API') {
+      } else if (actionType === 'API') {
         await action.run(request, { ...requestBody });
       }
     }
@@ -44,7 +46,7 @@ export const runMultipleAction = async (req: Request, res: Response) => {
 
     for (const _action of requestBody) {
       const project = _action['project'];
-      const actionType = _action['actionType'];
+      const actionType = _action['actionType'] ? _action['actionType'] : 'UI';
       const actionName = _action['actionName'];
       const repeatAction = _action['repeat']
         ? _action['repeat']

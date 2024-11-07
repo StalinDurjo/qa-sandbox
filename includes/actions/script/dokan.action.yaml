@@ -1,13 +1,24 @@
 project: 'dokan'
+
+credentials: &auth_params
+  username: 'admin'
+  password: '01Testing01!'
+
 actions:
-  - actionName: 'Change permalink'
+  - actionName: 'Set Product Status To Published'
     actionType: 'UI'
     repeat: 1
     actionSteps:
       - 'login-to-admin'
-      - 'change-permalink'
-      - 'click-on-save-changes'
+      - 'set-product-status-to-published'
     parameter:
-      - username: 'admin'
-        password: 'admin@email.com'
-      - permalinkType: 'Post name'
+      - *auth_params
+
+  - actionName: 'Create Vendor'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'create-vendor'
+      - 'complete-vendor-setup-wizard'
+    parameter:
+      - password: '01Testing01!'

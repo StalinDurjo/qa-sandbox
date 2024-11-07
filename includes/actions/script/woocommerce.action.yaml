@@ -40,3 +40,18 @@ actions:
       - 'enable-tax-rates'
     parameter:
       - *auth_params
+
+  - actionName: 'Set Site Visibility To Live'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'login-to-admin'
+      - 'set-site-visibility-to-live'
+    parameter:
+      - *auth_params
+
+  - actionName: 'Create Customer'
+    actionType: 'UI'
+    repeat: 1
+    actionSteps:
+      - 'create-customer'

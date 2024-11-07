@@ -26,6 +26,4 @@ export default class WpBasePage {
       await this.submit('Save Changes').click();
     }
   }
-
-  async;
 }
