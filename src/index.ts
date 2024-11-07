@@ -9,7 +9,6 @@ import { mockerRegistry } from './service/mocker-request/mocker-registry';
 import './service/mailer/mailer';
 import './scheduler';
 import { versionTracker } from './service/version-tracker';
-import ActionScriptLoader from './service/action/script-loader';
 
 (async () => {
   // start local server
@@ -24,7 +23,4 @@ import ActionScriptLoader from './service/action/script-loader';
   dynamicRouter.initialize();
 
   await versionTracker.initialize();
-
-  // const actionScriptLoader = new ActionScriptLoader();
-  // console.log(actionScriptLoader.loadFromYaml());
 })();
