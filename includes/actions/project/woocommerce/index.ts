@@ -85,7 +85,9 @@ export default class WoocommerceActionProject {
     const myAccountsPage = new MyAccountAuthPage(page);
     const dokanMyAccountsPage = new DokanMyAccountAuthPage(page);
 
-    await dokanMyAccountsPage.clickOnImCustomerCheckbox();
+    if (await dokanMyAccountsPage.imCustomerCheckbox().isVisible()) {
+      await dokanMyAccountsPage.clickOnImCustomerCheckbox();
+    }
 
     await myAccountsPage.enterRegisterEmail('customer1@email.com');
     await myAccountsPage.enterRegisterPassword('01Testing01!');

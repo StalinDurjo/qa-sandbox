@@ -2,7 +2,7 @@ project: 'dokan'
 
 credentials: &auth_params
   username: 'admin'
-  password: '01Testing01!'
+  password: '01Test01!'
 
 actions:
   - actionName: 'Set Product Status To Published'
@@ -21,4 +21,4 @@ actions:
       - 'create-vendor'
       - 'complete-vendor-setup-wizard'
     parameter:
-      - password: '01Testing01!'
+      - password: '01Test01!'

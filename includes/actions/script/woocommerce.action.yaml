@@ -2,7 +2,7 @@ project: 'woocommerce'
 
 credentials: &auth_params
   username: 'admin'
-  password: '01Testing01!'
+  password: '01Test01!'
 
 actions:
   - actionName: 'Install Storefront Theme'

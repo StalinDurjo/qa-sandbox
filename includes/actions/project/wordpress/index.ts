@@ -86,7 +86,6 @@ export default class WordpressActionProject {
   }
 
   async setAnyoneCanRegister(actionStepName = 'set-on-anyone-can-register', page: Page, { baseUrl }) {
-    console.log('Reached. ', baseUrl);
     const generalSettingsPage = new WpGeneralSettingsPage(page);
     await page.goto(baseUrl + '/wp-admin/options-general.php');
     await generalSettingsPage.clickOnSetAnyoneCanRegister();
