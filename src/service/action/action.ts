@@ -1,6 +1,7 @@
 import { toFileUrl } from '@src/lib/util/util';
 import { actionRegistry, ProjectInfo } from './action-registry';
 import ActionScriptLoader from './script-loader';
+import { database } from '../database';
 
 type ActionProjectClassInfo = {
   project: string;
@@ -52,16 +53,26 @@ export default class Action {
     }
   }
 
-  async run(_object: unknown, { project, actionName }) {
-    const [actions] = this.actionScriptLoader.loadScript({ project, actionName });
+  async run(_object: unknown, param: any) {
+    const [actions] = this.actionScriptLoader.loadScript({ project: param['project'], actionName: param['actionName'] });
 
     for (const actionStep of actions.actionSteps) {
-      const action = (await this.loadStepMethods({ project })).find((data) => this.getStepName(data) === actionStep);
+      const action = (await this.loadStepMethods({ project: param['project'] })).find((data) => this.getStepName(data) === actionStep);
 
       if (this.getStepName(action) === actionStep) {
-        const [parameterObject] = this.actionScriptLoader.loadParameter().filter((obj) => obj._function === actionStep && obj.project === project && obj.actionName === actionName);
+        const [parameterObject] = this.actionScriptLoader
+          .loadParameter()
+          .filter((obj) => obj._function === actionStep && obj.project === param['project'] && obj.actionName === param['actionName']);
 
-        await action(null, _object, { ...parameterObject.parameter });
+        const parameters = { ...parameterObject.parameter };
+
+        for (const key in param) {
+          if (key in parameters) {
+            parameters[key] = param[key];
+          }
+        }
+
+        await action(null, _object, { ...parameters, baseUrl: await this.actionProjectBaseUrl() });
       }
     }
   }
@@ -72,5 +83,10 @@ export default class Action {
       const regex = /actionStepName=['"`]([^'"`]+)['"`]/;
       return params?.match(regex)?.[1];
     }
+  }
+
+  private async actionProjectBaseUrl() {
+    const [url] = await database.all(`SELECT action_project_base_url from options`);
+    return url['action_project_base_url'];
   }
 }

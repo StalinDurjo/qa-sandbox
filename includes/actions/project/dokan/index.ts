@@ -1,23 +1,64 @@
-import WpLoginPage from '@pages/woocommerce/wp-admin/auth/login.page';
+import DokanSellerSetupPage from '@pages/dokan/frontend/dokan-seller-setup/seller-setup.page';
+import DokanMyAccountAuthPage from '@pages/dokan/frontend/my-accounts/my-account-auth.page';
+import DokanSellingOptionsPage from '@pages/dokan/wp-admin/dokan/settings/selling-options.page';
+import DokanSettingsSidebarPage from '@pages/dokan/wp-admin/dokan/settings/settings-sidebar.page';
+import PageActions from '@pages/page-actions/page-actions';
+import WoocommerceMyAccountAuthPage from '@pages/woocommerce/frontend/my-account/auth/my-account-auth.page';
+import { database } from '@src/service/database';
 import { Page } from 'playwright';
 
 export default class DokanActionProject {
-  async createVendor(page: Page, { username, password }) {
-    const loginPage = new WpLoginPage(page);
-    await page.goto('http://dokan.test/my-account/');
-    await loginPage.enterUsername(username);
-    await loginPage.enterPassword(password);
-    await loginPage.clickOnLogin();
+  async loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {
+    await page.goto(baseUrl + '/wp-login.php');
+    const pageActions = new PageActions(page);
+    await pageActions.loginToAdmin({ username, password });
+  }
 
-    // check im vendor
-    // enter email
-    // enter password
-    // enter firstname
-    // enter lastname
-    // enter shopname
-    // enter phonenumber
-    // click on register
+  async setProductStatusToPublished(actionStepName = 'set-product-status-to-published', page: Page, { baseUrl }) {
+    await page.goto(baseUrl + '/wp-admin/admin.php?page=dokan#/settings');
 
-    //
+    const dokanSettingsSidebarPage = new DokanSettingsSidebarPage(page);
+    const sellingOptionsPage = new DokanSellingOptionsPage(page);
+    await dokanSettingsSidebarPage.clickOnSidebarMenu('Selling Options');
+
+    if (await sellingOptionsPage.productStatusPublishedRadioElement().isVisible()) {
+      await sellingOptionsPage.clickOnPublishedRadioButton();
+
+      if (!(await page.locator(`#dokan-license-expired-modal`).isVisible())) {
+        await sellingOptionsPage.clickOnSaveChanges();
+      }
+    }
+  }
+
+  async createVendor(actionStepName = 'create-vendor', page: Page, { baseUrl, password }) {
+    await page.goto(baseUrl + '/my-account/');
+    const myAccountsPage = new WoocommerceMyAccountAuthPage(page);
+    const dokanMyAccountsPage = new DokanMyAccountAuthPage(page);
+
+    await dokanMyAccountsPage.clickOnImVendorCheckbox();
+
+    const counter = await database.incrementCount();
+    await myAccountsPage.enterRegisterEmail(`vendor${counter}@email.com`);
+    await myAccountsPage.enterRegisterPassword(password);
+
+    await dokanMyAccountsPage.enterFirstName(`Vendor${counter}`);
+    await dokanMyAccountsPage.enterLastName(`_${counter}`);
+    await dokanMyAccountsPage.enterShopName(`vendor${counter}`);
+    await dokanMyAccountsPage.enterShopPhoneNumber(`0987654321`);
+    await page.keyboard.press('Enter');
+  }
+
+  async completeVendorSetupWizard(actionStepName = 'complete-vendor-setup-wizard', page: Page) {
+    const sellerSetupPage = new DokanSellerSetupPage(page);
+
+    await sellerSetupPage.clickOnLetsGoButton();
+    await sellerSetupPage.enterStreet1('One Apple Park Way');
+    await sellerSetupPage.enterCity('Cupertino');
+    await sellerSetupPage.enterZipCode('95014');
+    await sellerSetupPage.selectCountry('United States (US)');
+    await sellerSetupPage.selectState('California');
+    await sellerSetupPage.clickOnContinueButton();
+    await sellerSetupPage.clickOnSkipButton();
+    await sellerSetupPage.clickOnGoToDashboardButton();
   }
 }

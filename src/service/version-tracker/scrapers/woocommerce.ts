@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import { DependencyVersion, WebScraperLoader } from '../scraper-loader';
 
 export async function woocommerceScraper(targetDependency: string, targetUrl: string): Promise<DependencyVersion> {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, timeout: 120 * 1000 });
   const context = await browser.newContext();
   const page = await context.newPage();
 

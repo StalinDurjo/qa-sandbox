@@ -1,68 +1,113 @@
 import BrowserUtil from '@src/lib/browser';
 import Action from '@src/service/action/action';
 import ActionScriptLoader from '@src/service/action/script-loader';
+import { database } from '@src/service/database';
 import { Request, Response } from 'express';
 import { request } from 'playwright';
 
-export const runSingleAction = async (req: Request, res: Response) => {
+interface ActionRequest {
+  project: string;
+  actionName: string;
+  actionType?: 'UI' | 'API';
+  repeat?: number;
+  [key: string]: any;
+}
+
+const executeUIAction = async (action: Action, actionConfig: ActionRequest): Promise<void> => {
+  const browser = new BrowserUtil();
   try {
-    const { project, actionName, repeat, actionType } = req.body;
-    const actionScript = new ActionScriptLoader();
-    const action = new Action();
+    const page = await browser.createInstance();
+    await action.run(page, actionConfig);
+  } finally {
+    await browser.closeInstance();
+  }
+};
 
-    const repeatAction = repeat ? repeat : actionScript.loadScript({ project, actionName })[0]['repeat'];
+const executeAPIAction = async (action: Action, actionConfig: ActionRequest): Promise<void> => {
+  await action.run(request, actionConfig);
+};
 
-    for (let i = 0; i < repeatAction; i++) {
-      if (actionType === 'UI') {
-        const browser = new BrowserUtil();
-        const page = await browser.createInstance();
-        await action.run(page, { project, actionName });
-        await browser.closeInstance();
-      } else if (actionType === 'API') {
-        await action.run(request, { project, actionName });
-      }
+const executeAction = async (actionConfig: ActionRequest): Promise<void> => {
+  const actionScript = new ActionScriptLoader();
+  const action = new Action();
+
+  const actionType = actionConfig.actionType || 'UI';
+  const script = actionScript.loadScript({
+    project: actionConfig.project,
+    actionName: actionConfig.actionName
+  });
+
+  const repeatCount = actionConfig.repeat ?? script[0].repeat;
+
+  for (let i = 0; i < repeatCount; i++) {
+    if (actionType === 'UI') {
+      await executeUIAction(action, actionConfig);
+    } else if (actionType === 'API') {
+      await executeAPIAction(action, actionConfig);
+    } else {
+      throw new Error(`Unsupported action type: ${actionType}`);
     }
+  }
+};
 
-    res.status(200).send('Action executed successfully!');
+export const runSingleAction = async (req: Request, res: Response): Promise<void> => {
+  try {
+    await executeAction(req.body);
+    res.status(200).json({ message: 'Action executed successfully!' });
   } catch (error) {
-    res.status(400).send({
+    res.status(400).json({
       message: 'Something went wrong while running action.',
-      error: error
+      error
     });
   }
 };
 
-export const runMultipleAction = async (req: Request, res: Response) => {
+export const runMultipleAction = async (req: Request, res: Response): Promise<void> => {
   try {
-    const actionList = req.body;
-    const actionScript = new ActionScriptLoader();
-    const action = new Action();
+    const actions: ActionRequest[] = req.body;
+    for (const action of actions) {
+      await executeAction(action);
+    }
+    res.status(200).json({ message: 'Action(s) executed successfully!' });
+  } catch (error) {
+    res.status(400).json({
+      message: 'Something went wrong while running actions.',
+      error
+    });
+  }
+};
 
-    for (const _action of actionList) {
-      const project = _action['project'];
-      const actionType = _action['actionType'];
-      const actionName = _action['actionName'];
-      const repeatAction = _action['repeat']
-        ? _action['repeat']
-        : (actionScript.loadScript({ project: _action['project'], actionName: _action['actionName'] })[0]['repeat'] as any);
+const updateProjectUrl = async (url: string): Promise<void> => {
+  const initQuery = `
+    INSERT INTO options (action_project_base_url)
+    SELECT 'testvalue'
+    WHERE NOT EXISTS (SELECT 1 FROM options);
+  `;
 
-      for (let i = 0; i < repeatAction; i++) {
-        if (actionType === 'UI') {
-          const browser = new BrowserUtil();
-          const page = await browser.createInstance();
-          await action.run(page, { project, actionName });
-          await browser.closeInstance();
-        } else if (actionType === 'API') {
-          await action.run(request, { project, actionName });
-        }
-      }
+  const updateQuery = `
+    UPDATE options
+    SET action_project_base_url = ?
+    WHERE rowid = (SELECT rowid FROM options ORDER BY rowid LIMIT 1);
+  `;
+
+  await database.run(initQuery);
+  await database.run(updateQuery, [url]);
+};
+
+export const setActionProjectUrl = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { actionProjectBaseUrl } = req.body;
+
+    if (!actionProjectBaseUrl) {
+      throw new Error('Action project base URL is required');
     }
 
-    res.status(200).send('Action(s) executed successfully!');
+    await updateProjectUrl(actionProjectBaseUrl);
+    res.status(200).json({ message: 'Action project base URL set successfully!' });
   } catch (error) {
-    res.status(400).send({
-      message: 'Something went wrong while running action.',
-      error: error
+    res.status(400).json({
+      message: 'Something went wrong while setting Action project base URL.',
+      error
     });
   }
 };
