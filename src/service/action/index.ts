@@ -8,6 +8,6 @@ for(const file of files){
   const projectName = file
   actionRegistry.register({
     name: projectName,
-    directory: './' + projectName
+    directory: `./${projectName}`
   });
 }
