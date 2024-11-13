@@ -16,7 +16,7 @@ interface ActionRequest {
 const executeUIAction = async (action: Action, actionConfig: ActionRequest): Promise<void> => {
   const browser = new BrowserUtil();
   try {
-    const page = await browser.createInstance();
+    const page = await browser.createInstance({ headless: false });
     await action.run(page, actionConfig);
   } finally {
     await browser.closeInstance();
