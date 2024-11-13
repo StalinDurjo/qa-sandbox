@@ -1,12 +1,12 @@
-import { Browser, BrowserContext, chromium, Page } from 'playwright';
+import { Browser, BrowserContext, chromium, LaunchOptions, Page } from 'playwright';
 
 export default class BrowserUtil {
   private browser: Browser;
   private context: BrowserContext;
   private page: Page;
 
-  async createInstance() {
-    this.browser = await chromium.launch({ headless: false });
+  async createInstance(config?: LaunchOptions) {
+    this.browser = await chromium.launch({ ...config });
     this.context = await this.browser.newContext();
     return (this.page = await this.context.newPage());
   }
