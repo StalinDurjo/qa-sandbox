@@ -22,13 +22,9 @@ export default class Action {
 
       for (const project of registeredProjectList) {
         const _import = await import(toFileUrl(project.directory));
-        const _module = _import.default;
-        const instance = new _module();
-        const properties = Object.getOwnPropertyDescriptors(Object.getPrototypeOf(instance));
-
         projectList.push({
           project: project.name,
-          properties: properties
+          properties: _import
         });
       }
 
@@ -45,9 +41,7 @@ export default class Action {
         return data.properties;
       });
 
-      return Object.keys(properties)
-        .map((key) => properties[key].value)
-        .filter((item) => typeof item === 'function');
+      return Object.keys(properties).map((key) => properties[key])
     } catch (error) {
       throw new Error('Something went wrong while returning project actions steps as list \n' + error);
     }
