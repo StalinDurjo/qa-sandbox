@@ -1,26 +1,22 @@
-import MockerProject from '@src/service/mocker-request/mocker-project';
+import { MockerData } from '@src/service/mock-request/mock-request';
 
-const project = new MockerProject({ projectName: 'default' });
-
-project.addMethod({ endpoint: '/bank-details' }, async (data) => {
+export async function bankDetails(endpoint = '/bank-details', data: MockerData) {
   return {
-    ...((await data.mocker.bankAccount.fullBankDetails()) as Object)
+    ...(await data.mocker.bankAccount.fullBankDetails())
   };
-});
+}
 
-project.addMethod({ endpoint: '/user-details' }, async (data) => {
+export async function userDetails(endpoint = '/user-details', data: MockerData) {
   return {
-    ...((await data.mocker.person.fullPersonDetails()) as Object)
+    ...(await data.mocker.person.fullPersonDetails())
   };
-});
+}
 
-project.addMethod({ endpoint: '/full-user-details' }, async (data) => {
+export async function fullUserDetails(endpoint = '/full-user-details', data: MockerData) {
   return {
-    ...((await data.mocker.person.fullPersonDetails()) as Object),
-    ...((await data.mocker.location.structuredAddress()) as Object),
-    ...((await data.mocker.employment.fullEmploymentDetails()) as Object),
-    ...((await data.mocker.bankAccount.fullBankDetails()) as Object)
+    ...(await data.mocker.person.fullPersonDetails()),
+    ...(await data.mocker.location.structuredAddress()),
+    ...(await data.mocker.employment.fullEmploymentDetails()),
+    ...(await data.mocker.bankAccount.fullBankDetails())
   };
-});
-
-export default project;
+}

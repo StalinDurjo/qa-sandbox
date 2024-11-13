@@ -1,6 +1,6 @@
 import { database } from '../database';
 
-export const initializeMockData = async () => {
+(async () => {
   const countryTable = await database.all(`SELECT * FROM country;`);
   if (countryTable.length === 0) await database.exec(__dirname + '/queries/country.sql');
 
@@ -27,4 +27,4 @@ export const initializeMockData = async () => {
 
   const bankAccountTable = await database.all(`SELECT * FROM bank_account;`);
   if (bankAccountTable.length === 0) await database.exec(__dirname + '/queries/bank-account.sql');
-};
+})();
