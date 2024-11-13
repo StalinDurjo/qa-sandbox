@@ -1,7 +1,8 @@
+import { dependencies } from 'includes/version-tracker/dependency-list';
 import { DependencyDatabaseQueries } from './db-query';
-import { dependencies, DependencyConfig } from './dependency-list';
 import { VersionTrackerMessageDispatcher } from './dispatch';
 import { WebScraperLoader } from './scraper-loader';
+import { _VersionTracker } from '@src/type';
 
 export class VersionTracker {
   constructor(
@@ -11,7 +12,7 @@ export class VersionTracker {
   ) {}
 
   async initialize(): Promise<void> {
-    await this.scraperLoader.loadScrapers();
+    await this.scraperLoader.load();
     await this.populateInitialData();
   }
 
@@ -38,7 +39,7 @@ export class VersionTracker {
     return records.some((record) => !record.stored_data && record.is_searchable === 1);
   }
 
-  async executeScrapers(configs?: DependencyConfig[], storeInCompareData: boolean = false): Promise<void> {
+  async executeScrapers(configs?: _VersionTracker.DependencyConfig[], storeInCompareData: boolean = false): Promise<void> {
     const targetsToScrape = configs || dependencies;
 
     for (const config of targetsToScrape) {

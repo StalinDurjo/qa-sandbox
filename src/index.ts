@@ -6,7 +6,7 @@ import { initializeDatabase } from './service/database';
 import { dynamicRouter } from './server/route/dynamic-router';
 import './service/mailer/mailer';
 import './scheduler';
-import { versionTracker } from './service/version-tracker';
+import './service/version-tracker';
 import { mockRequest } from './service/mock-request';
 
 (async () => {
@@ -17,5 +17,4 @@ import { mockRequest } from './service/mock-request';
   await mockRequest.initializeRoutes();
   // initialize the creation of dynamic routes
   dynamicRouter.initialize();
-  await versionTracker.initialize();
 })();

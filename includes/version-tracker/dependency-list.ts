@@ -1,10 +1,6 @@
-export interface DependencyConfig {
-  scraper: string;
-  dependency: string;
-  targetUrl: string;
-}
+import { _VersionTracker } from '@src/type';
 
-export const dependencies: DependencyConfig[] = [
+export const dependencies: _VersionTracker.DependencyConfig[] = [
   {
     scraper: 'woocommerce',
     dependency: 'Stripe for WooCommerce',

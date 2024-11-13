@@ -1,5 +1,6 @@
 import { searchFiles } from '@src/lib/util/util';
 import path from 'path';
+import fs from 'fs';
 
 export interface DependencyVersion {
   pluginVersion: string;
@@ -31,6 +32,19 @@ export class WebScraperLoader {
     for (const file of files) {
       const module = await import(file);
       module.default(this);
+    }
+  }
+
+  async load() {
+    const directoryPath = process.cwd() + `/includes/version-tracker/scrapers`;
+    const files = fs.readdirSync(directoryPath);
+
+    for (const file of files) {
+      const fileName = file;
+      const fullPath = path.join(directoryPath, file);
+      const scraperName = fileName.split('.ts')[0];
+      const module = await import(fullPath);
+      this.registerScraper(scraperName, module.default);
     }
   }
 }

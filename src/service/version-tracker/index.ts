@@ -6,6 +6,12 @@ import { VersionTrackerMessageDispatcher } from './dispatch';
 
 export const versionTracker = new VersionTracker(new DependencyDatabaseQueries(), new WebScraperLoader(), new VersionTrackerMessageDispatcher());
 
+export const scraperLoader = new WebScraperLoader();
+
+(async () => {
+  await versionTracker.initialize();
+})();
+
 scheduler.scheduleTask({
   name: 'run-tracker-for-unstored-dependencies',
   schedule: '0 */15 * * * *', // runs every 15 minute

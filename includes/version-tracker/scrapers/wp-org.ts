@@ -1,7 +1,7 @@
+import { DependencyVersion } from '@src/service/version-tracker/scraper-loader';
 import { chromium } from 'playwright';
-import { DependencyVersion, WebScraperLoader } from '../scraper-loader';
 
-export async function wporgScraper(targetDependency: string, targetUrl: string): Promise<DependencyVersion> {
+export default async function wporgScraper(targetDependency: string, targetUrl: string): Promise<DependencyVersion> {
   const browser = await chromium.launch({ headless: true, timeout: 120 * 1000 });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -20,9 +20,4 @@ export async function wporgScraper(targetDependency: string, targetUrl: string):
     await context.close();
     await browser.close();
   }
-}
-
-// Register the scraper
-export default async function register(scraperLoader: WebScraperLoader): Promise<void> {
-  scraperLoader.registerScraper('wp-org', wporgScraper);
 }

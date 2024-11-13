@@ -1,7 +1,7 @@
+import { DependencyVersion, WebScraperLoader } from '@src/service/version-tracker/scraper-loader';
 import { chromium } from 'playwright';
-import { DependencyVersion, WebScraperLoader } from '../scraper-loader';
 
-export async function woocommerceScraper(targetDependency: string, targetUrl: string): Promise<DependencyVersion> {
+export default async function woocommerceScraper(targetDependency: string, targetUrl: string): Promise<DependencyVersion> {
   const browser = await chromium.launch({ headless: true, timeout: 120 * 1000 });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -20,9 +20,4 @@ export async function woocommerceScraper(targetDependency: string, targetUrl: st
     await context.close();
     await browser.close();
   }
-}
-
-// Register the scraper
-export default function register(scraperLoader: WebScraperLoader): void {
-  scraperLoader.registerScraper('woocommerce', woocommerceScraper);
 }
