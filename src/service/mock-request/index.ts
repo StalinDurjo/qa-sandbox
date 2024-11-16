@@ -1,18 +1,6 @@
-import fs from 'fs';
-import MockRequestRegistry from './mock-registry';
 import MockRequest from './mock-request';
+import {MockRequestRegistry} from "@src/service/mock-request/mock-registry";
 
-export const mockRequestRegistry = new MockRequestRegistry();
-
-const registryPath: string = process.cwd() + '/includes/mocker/project';
-const files = fs.readdirSync(registryPath);
-
-for (const file of files) {
-  const projectName = file;
-  mockRequestRegistry.register({
-    name: projectName,
-    directory: `./${projectName}`
-  });
-}
-
+export const mockRequestRegistry = new MockRequestRegistry()
+mockRequestRegistry.autoLoad()
 export const mockRequest = new MockRequest();

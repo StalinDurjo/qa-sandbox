@@ -1,5 +1,5 @@
-import { DependencyVersion } from '@src/service/version-tracker/scraper-loader';
 import { chromium } from 'playwright';
+import {DependencyVersion} from "@src/service/version-tracker/scraper-registry";
 
 export default async function wporgScraper(targetDependency: string, targetUrl: string): Promise<DependencyVersion> {
   const browser = await chromium.launch({ headless: true, timeout: 120 * 1000 });

@@ -1,4 +1,4 @@
-import { database } from '../database';
+import { database } from '../../core/database';
 
 (async () => {
   const countryTable = await database.all(`SELECT * FROM country;`);

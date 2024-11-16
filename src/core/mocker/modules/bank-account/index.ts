@@ -1,4 +1,4 @@
-import { database } from '@src/service/database';
+import { database } from 'src/core/database';
 import BaseMocker from '../../base';
 import { randomize } from '@src/lib/util/util';
 

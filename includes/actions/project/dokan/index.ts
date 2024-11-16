@@ -4,7 +4,7 @@ import DokanSellingOptionsPage from '@pages/dokan/wp-admin/dokan/settings/sellin
 import DokanSettingsSidebarPage from '@pages/dokan/wp-admin/dokan/settings/settings-sidebar.page';
 import PageActions from '@pages/page-actions/page-actions';
 import WoocommerceMyAccountAuthPage from '@pages/woocommerce/frontend/my-account/auth/my-account-auth.page';
-import { database } from '@src/service/database';
+import { database } from 'src/core/database';
 import { Page } from 'playwright';
 
 export async function loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {

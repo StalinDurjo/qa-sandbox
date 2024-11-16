@@ -1,4 +1,4 @@
-import { database } from '../database';
+import { database } from '../../core/database';
 
 export interface DependencyRecord {
   scraper_name: string;

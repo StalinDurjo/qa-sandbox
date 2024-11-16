@@ -1,7 +1,7 @@
 import BrowserUtil from '@src/lib/browser';
 import Action from '@src/service/action/action';
 import ActionScriptLoader from '@src/service/action/script-loader';
-import { database } from '@src/service/database';
+import { database } from 'src/core/database';
 import { Request, Response } from 'express';
 import { request } from 'playwright';
 

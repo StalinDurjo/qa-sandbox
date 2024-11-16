@@ -1,18 +1,16 @@
 import { dependencies } from 'includes/version-tracker/dependency-list';
 import { DependencyDatabaseQueries } from './db-query';
 import { VersionTrackerMessageDispatcher } from './dispatch';
-import { WebScraperLoader } from './scraper-loader';
-import { _VersionTracker } from '@src/type';
+import { DepedencyVersionTracker } from '@src/type';
+import {scraperRegistry} from "@src/service/version-tracker/index";
 
 export class VersionTracker {
   constructor(
     readonly database: DependencyDatabaseQueries,
-    private readonly scraperLoader: WebScraperLoader,
     readonly messageDispatcher: VersionTrackerMessageDispatcher
   ) {}
 
   async initialize(): Promise<void> {
-    await this.scraperLoader.load();
     await this.populateInitialData();
   }
 
@@ -39,11 +37,11 @@ export class VersionTracker {
     return records.some((record) => !record.stored_data && record.is_searchable === 1);
   }
 
-  async executeScrapers(configs?: _VersionTracker.DependencyConfig[], storeInCompareData: boolean = false): Promise<void> {
+  async executeScrapers(configs?: DepedencyVersionTracker.DependencyConfig[], storeInCompareData: boolean = false): Promise<void> {
     const targetsToScrape = configs || dependencies;
 
     for (const config of targetsToScrape) {
-      const scraper = this.scraperLoader.getScraper(config.scraper);
+      const scraper = scraperRegistry.getScraper(config.scraper);
       if (!scraper) {
         console.error(`No scraper found for: ${config.scraper}`);
         continue;

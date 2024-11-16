@@ -1,4 +1,4 @@
-import { database } from '@src/service/database';
+import { database } from 'src/core/database';
 import { MockerData } from '@src/service/mock-request/mock-request';
 
 export async function fullUserDetails(endpoint = '/vendor-store', data: MockerData) {

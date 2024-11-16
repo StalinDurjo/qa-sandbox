@@ -1,4 +1,4 @@
-export namespace _VersionTracker {
+export namespace DepedencyVersionTracker {
   interface DependencyConfig {
     scraper: string;
     dependency: string;

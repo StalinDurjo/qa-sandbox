@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { randomize, toFileUrl } from '@src/lib/util/util';
-import { mockRequestRegistry } from '.';
 import { dynamicRouter } from '@src/server/route/dynamic-router';
-import Mocker from '../mocker/mocker';
 import { localeSupportList } from '@src/constant';
+import {mockRequestRegistry} from "@src/service/mock-request/index";
+import Mocker from "@src/core/mocker/mocker";
 
 export interface MockerData {
   payload: unknown;
@@ -19,7 +19,9 @@ export default class MockRequest {
   async importAsObjectList(): Promise<any> {
     try {
       const projectList = [];
-      const registeredProjectList = mockRequestRegistry.getRegisteredProjects();
+      // const registeredProjectList = mockRequestRegistry.getRegisteredProjects();
+
+      const registeredProjectList = mockRequestRegistry.getItems();
 
       for (const project of registeredProjectList) {
         const _import = await import(toFileUrl(project.directory));

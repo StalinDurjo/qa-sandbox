@@ -1,7 +1,7 @@
 import { toFileUrl } from '@src/lib/util/util';
-import { actionRegistry, ProjectInfo } from './action-registry';
 import ActionScriptLoader from './script-loader';
-import { database } from '../database';
+import { database } from '../../core/database';
+import {actionRegistry} from "@src/service/action/index";
 
 type ActionProjectClassInfo = {
   project: string;
@@ -18,7 +18,7 @@ export default class Action {
   private async importAsObjectList(): Promise<ActionProjectClassInfo[]> {
     try {
       const projectList: ActionProjectClassInfo[] = [];
-      const registeredProjectList: ProjectInfo[] = actionRegistry.registeredProjects();
+      const registeredProjectList = actionRegistry.getItems();
 
       for (const project of registeredProjectList) {
         const _import = await import(toFileUrl(project.directory));

@@ -3,7 +3,7 @@ import { runMultipleAction, runSingleAction, setActionProjectUrl } from '../cont
 const router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {
-  res.send('Test Server!');
+  res.send('OK!');
 });
 
 router.post('/run-action', runSingleAction);

@@ -1,13 +1,16 @@
 import fs from "fs";
-import {actionRegistry} from "@src/service/action/action-registry";
+import {ActionRegistry} from "@src/service/action/action-registry";
 
-const registryPath: string = process.cwd() + '/includes/actions/project'
-const files = fs.readdirSync(registryPath);
+export const actionRegistry = new ActionRegistry()
+actionRegistry.autoLoad()
 
-for(const file of files){
-  const projectName = file
-  actionRegistry.register({
-    name: projectName,
-    directory: `./${projectName}`
-  });
-}
+// const registryPath: string = process.cwd() + '/includes/actions/project'
+// const files = fs.readdirSync(registryPath);
+//
+// for(const file of files){
+//   const projectName = file
+//   actionRegistry.register({
+//     name: projectName,
+//     directory: `./${projectName}`
+//   });
+// }

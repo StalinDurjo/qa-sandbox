@@ -1,6 +1,6 @@
-import { _VersionTracker } from '@src/type';
+import { DepedencyVersionTracker } from '@src/type';
 
-export const dependencies: _VersionTracker.DependencyConfig[] = [
+export const dependencies: DepedencyVersionTracker.DependencyConfig[] = [
   {
     scraper: 'woocommerce',
     dependency: 'Stripe for WooCommerce',
