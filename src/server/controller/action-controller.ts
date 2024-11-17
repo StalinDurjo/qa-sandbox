@@ -52,9 +52,10 @@ const executeAction = async (actionConfig: ActionRequest): Promise<void> => {
 
 export const runSingleAction = async (req: Request, res: Response): Promise<void> => {
   try {
-    const projectUrl = await getProjectUrl()
+    const projectUrl = await getProjectUrl();
 
-    if(!projectUrl){
+    if (!projectUrl) {
+      console.log('Action project URL is not set.');
       throw new Error('Project URL is not set.');
     }
 
@@ -70,9 +71,9 @@ export const runSingleAction = async (req: Request, res: Response): Promise<void
 
 export const runBatchAction = async (req: Request, res: Response): Promise<void> => {
   try {
-    const projectUrl = await getProjectUrl()
+    const projectUrl = await getProjectUrl();
 
-    if(!projectUrl){
+    if (!projectUrl) {
       throw new Error('Project URL is not set.');
     }
 
@@ -90,7 +91,7 @@ export const runBatchAction = async (req: Request, res: Response): Promise<void>
 };
 
 const updateProjectUrl = async (url: string): Promise<void> => {
-  try{
+  try {
     const initQuery = `
     INSERT INTO options (action_project_base_url)
     SELECT 'testvalue'
@@ -105,26 +106,20 @@ const updateProjectUrl = async (url: string): Promise<void> => {
 
     await database.run(initQuery);
     await database.run(updateQuery, [url]);
-  }catch(error){
-    console.log('Failed to update action project URL.')
-    console.log(error)
+  } catch (error) {
+    console.log('Failed to update action project URL.');
+    console.log(error);
   }
-
 };
 
 const getProjectUrl = async () => {
-  try{
-    const initQuery = `
+  const initQuery = `
     SELECT action_project_base_url from options;
   `;
 
-    const data = await database.all(initQuery);
-    return data[0]['action_project_base_url']
-  }catch(error){
-    console.log('Failed to get action project URL.')
-    console.log(error)
-  }
-}
+  const data = await database.all(initQuery);
+  return data[0]?.['action_project_base_url'];
+};
 
 export const setActionProjectUrl = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -146,11 +141,16 @@ export const setActionProjectUrl = async (req: Request, res: Response): Promise<
 
 export const getActionProjectUrl = async (req: Request, res: Response): Promise<void> => {
   try {
-    const projectUrl = await getProjectUrl()
+    const projectUrl = await getProjectUrl();
+
+    if (!projectUrl) {
+      console.log('Action project URL is not set.');
+      throw new Error('Action project URL is not set.');
+    }
     res.status(200).json({ message: 'Success!', url: projectUrl });
   } catch (error) {
     res.status(400).json({
-      message: 'Something went wrong while getting Action project base URL.',
+      message: 'Failed to get Action project base URL.',
       error
     });
   }

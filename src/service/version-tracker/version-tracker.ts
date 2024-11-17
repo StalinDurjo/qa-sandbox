@@ -2,7 +2,8 @@ import { dependencies } from 'includes/version-tracker/dependency-list';
 import { DependencyDatabaseQueries } from './db-query';
 import { VersionTrackerMessageDispatcher } from './dispatch';
 import { DepedencyVersionTracker } from '@src/type';
-import {scraperRegistry} from "@src/service/version-tracker/index";
+import { scraperRegistry } from '@src/service/version-tracker/index';
+import { Browser, BrowserContext, chromium } from 'playwright';
 
 export class VersionTracker {
   constructor(
@@ -47,8 +48,14 @@ export class VersionTracker {
         continue;
       }
 
+      let browser: Browser;
+      let context: BrowserContext;
+
       try {
-        const data = await scraper(config.dependency, config.targetUrl);
+        browser = await chromium.launch({ headless: false, timeout: 120 * 1000 });
+        context = await browser.newContext();
+        const page = await context.newPage();
+        const data = await scraper({ page, targetDependency: config.dependency, targetUrl: config.targetUrl });
 
         if (storeInCompareData) {
           await this.database.updateCompareData(config.scraper, config.dependency, JSON.stringify(data));
@@ -58,6 +65,9 @@ export class VersionTracker {
       } catch (error) {
         await this.database.updateIsSearchable(config.scraper, config.dependency, '0');
         console.error(`Error scraping ${config.dependency} with ${config.scraper}:`, error);
+      } finally {
+        await context.close();
+        await browser.close();
       }
     }
   }

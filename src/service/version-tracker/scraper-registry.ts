@@ -1,12 +1,13 @@
-import fs from "fs";
-import path from "path";
-import {BaseRegistry, RegistryItem} from "@src/core/registry/base-registry";
+import fs from 'fs';
+import path from 'path';
+import { BaseRegistry, RegistryItem } from '@src/core/registry/base-registry';
+import { Page } from 'playwright';
 
 export interface ScraperItem extends RegistryItem {
   scraper: ScraperFunction;
 }
 
-export type ScraperFunction = (targetDependency: string, targetUrl: string) => Promise<DependencyVersion>;
+export type ScraperFunction = ({ page, targetDependency, targetUrl }: { page: Page; targetDependency?: string; targetUrl: string }) => Promise<DependencyVersion>;
 
 export interface DependencyVersion {
   pluginVersion: string;
@@ -45,8 +46,7 @@ export class ScraperRegistry extends BaseRegistry<ScraperItem> {
     }
   }
 
-
   getScraper(name: string): ScraperFunction | undefined {
-    return this.items.find(item => item.name === name)?.scraper;
+    return this.items.find((item) => item.name === name)?.scraper;
   }
 }

@@ -1,23 +1,13 @@
-import { chromium } from 'playwright';
-import {DependencyVersion} from "@src/service/version-tracker/scraper-registry";
+import { DependencyVersion } from '@src/service/version-tracker/scraper-registry';
 
-export default async function woocommerceScraper(targetDependency: string, targetUrl: string): Promise<DependencyVersion> {
-  const browser = await chromium.launch({ headless: true, timeout: 120 * 1000 });
-  const context = await browser.newContext();
-  const page = await context.newPage();
+export default async function woocommerceScraper({ page, targetUrl }): Promise<DependencyVersion> {
+  await page.goto(targetUrl);
 
-  try {
-    await page.goto(targetUrl);
+  const [pluginVersion] = await page.locator(`//aside//div[@class="wccom-product-box"]//a/div/p[text()="Latest version"]/following-sibling::p`).allInnerTexts();
 
-    const [pluginVersion] = await page.locator(`//aside//div[@class="wccom-product-box"]//a/div/p[text()="Latest version"]/following-sibling::p`).allInnerTexts();
-
-    return {
-      pluginVersion,
-      wordpressVersion: '',
-      phpVersion: ''
-    };
-  } finally {
-    await context.close();
-    await browser.close();
-  }
+  return {
+    pluginVersion,
+    wordpressVersion: '',
+    phpVersion: ''
+  };
 }
