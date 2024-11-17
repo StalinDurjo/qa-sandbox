@@ -1,7 +1,6 @@
 import { database } from 'src/core/database';
-import { MockerData } from '@src/service/mock-request/mock-request';
 
-export async function fullUserDetails(endpoint = '/vendor-store', data: MockerData) {
+export async function fullUserDetails({ endpoint = '/vendor-store', data }) {
   const mocker = data.mocker;
   const counter = await database.incrementCount();
   const location = await mocker.location.structuredAddress();

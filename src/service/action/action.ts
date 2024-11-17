@@ -2,6 +2,7 @@ import { toFileUrl } from '@src/lib/util/util';
 import ActionScriptLoader from './script-loader';
 import { actionRegistry } from '@src/service/action/index';
 import { database } from '@src/core/database';
+import { ActionConfig } from '@src/server/controller/action-controller';
 
 type ActionProjectClassInfo = {
   project: string;
@@ -47,16 +48,16 @@ export default class Action {
     }
   }
 
-  async run(_object: unknown, config: any) {
-    const [actions] = this.actionScriptLoader.loadScript({ project: config['project'], actionName: config['actionName'] });
+  async run(_object: unknown, config: ActionConfig) {
+    const [actions] = this.actionScriptLoader.loadScript({ project: config.project, actionName: config.actionName });
 
     for (const actionStep of actions.actionSteps) {
-      const action = (await this.loadStepMethods({ project: config['project'] })).find((data) => this.getStepName(data) === actionStep);
+      const action = (await this.loadStepMethods({ project: config.project })).find((data) => this.getStepName(data) === actionStep);
 
       if (this.getStepName(action) === actionStep) {
         const [parameterObject] = this.actionScriptLoader
           .loadParameter()
-          .filter((obj) => obj._function === actionStep && obj.project === config['project'] && obj.actionName === config['actionName']);
+          .filter((obj) => obj._function === actionStep && obj.project === config.project && obj.actionName === config.actionName);
 
         const parameters = { ...parameterObject.parameter };
 
@@ -67,14 +68,16 @@ export default class Action {
         }
 
         const baseUrl = await this.actionProjectBaseUrl();
-        const actionType = config['actionType'];
+        const actionType = config.actionType ? config.actionType : actions.actionType;
 
-        if (actionType === 'UI') {
-          await action({ actionStep, page: _object, scriptParams: { ...parameters, baseUrl } });
-        } else if (actionType === 'API') {
-          await action({ actionStep, request: _object, scriptParams: { ...parameters, baseUrl } });
-        } else {
-          await action({ actionStep, obj: _object, scriptParams: { ...parameters, baseUrl } });
+        switch (actionType) {
+          case 'UI':
+            await action({ actionStep, page: _object, parameter: { ...parameters, baseUrl } });
+            break;
+          case 'API':
+            await action({ actionStep, request: _object, parameter: { ...parameters, baseUrl } });
+          default:
+            await action({ actionStep, obj: _object, parameter: { ...parameters, baseUrl } });
         }
       }
     }

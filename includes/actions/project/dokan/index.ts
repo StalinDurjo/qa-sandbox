@@ -5,15 +5,14 @@ import DokanSettingsSidebarPage from '@pages/dokan/wp-admin/dokan/settings/setti
 import PageActions from '@pages/page-actions/page-actions';
 import WoocommerceMyAccountAuthPage from '@pages/woocommerce/frontend/my-account/auth/my-account-auth.page';
 import { database } from 'src/core/database';
-import { Page } from 'playwright';
 
-export async function loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {
+export async function loginToAdmin({ actionStepName = 'login-to-admin', page, parameter: { username, password, baseUrl } }) {
   await page.goto(baseUrl + '/wp-login.php');
   const pageActions = new PageActions(page);
   await pageActions.loginToAdmin({ username, password });
 }
 
-export async function setProductStatusToPublished(actionStepName = 'set-product-status-to-published', page: Page, { baseUrl }) {
+export async function setProductStatusToPublished({ actionStepName = 'set-product-status-to-published', page, parameter: { baseUrl } }) {
   await page.goto(baseUrl + '/wp-admin/admin.php?page=dokan#/settings');
 
   const dokanSettingsSidebarPage = new DokanSettingsSidebarPage(page);
@@ -29,7 +28,7 @@ export async function setProductStatusToPublished(actionStepName = 'set-product-
   }
 }
 
-export async function createVendor(actionStepName = 'create-vendor', page: Page, { baseUrl, password }) {
+export async function createVendor({ actionStepName = 'create-vendor', page, parameter: { baseUrl, password } }) {
   await page.goto(baseUrl + '/my-account/');
   const myAccountsPage = new WoocommerceMyAccountAuthPage(page);
   const dokanMyAccountsPage = new DokanMyAccountAuthPage(page);
@@ -47,7 +46,7 @@ export async function createVendor(actionStepName = 'create-vendor', page: Page,
   await page.keyboard.press('Enter');
 }
 
-export async function completeVendorSetupWizard(actionStepName = 'complete-vendor-setup-wizard', page: Page) {
+export async function completeVendorSetupWizard({ actionStepName = 'complete-vendor-setup-wizard', page }) {
   const sellerSetupPage = new DokanSellerSetupPage(page);
 
   await sellerSetupPage.clickOnLetsGoButton();

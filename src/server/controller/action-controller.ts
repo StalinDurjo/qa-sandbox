@@ -5,7 +5,7 @@ import { database } from 'src/core/database';
 import { Request, Response } from 'express';
 import { request } from 'playwright';
 
-interface ActionRequest {
+export interface ActionConfig {
   project: string;
   actionName: string;
   actionType?: 'UI' | 'API';
@@ -13,37 +13,33 @@ interface ActionRequest {
   [key: string]: any;
 }
 
-const executeUIAction = async (action: Action, actionConfig: ActionRequest): Promise<void> => {
+const executeUIAction = async (action: Action, actionConfig: ActionConfig): Promise<void> => {
   const browser = new BrowserUtil();
   try {
     const page = await browser.createInstance({ headless: false });
-    console.log('config', actionConfig);
     await action.run(page, actionConfig);
   } finally {
     await browser.closeInstance();
   }
 };
 
-const executeAPIAction = async (action: Action, actionConfig: ActionRequest): Promise<void> => {
+const executeAPIAction = async (action: Action, actionConfig: ActionConfig): Promise<void> => {
   await action.run(request, actionConfig);
 };
 
-const executeAction = async (actionConfig: ActionRequest): Promise<void> => {
+const executeAction = async (actionConfig: ActionConfig): Promise<void> => {
   const actionScript = new ActionScriptLoader();
   const action = new Action();
 
-  // const actionType = actionConfig.actionType || 'UI';
   const script = actionScript.loadScript({
     project: actionConfig.project,
     actionName: actionConfig.actionName
   });
 
-  console.log(script);
-
   const repeatCount = actionConfig.repeat ?? script[0].repeat;
 
   for (let i = 0; i < repeatCount; i++) {
-    const actionType = actionConfig.actionType || script[0]['actionType'] || 'UI';
+    const actionType = actionConfig?.actionType || script[0]?.actionType || 'UI';
 
     if (actionType === 'UI') {
       await executeUIAction(action, actionConfig);
@@ -82,7 +78,8 @@ export const runBatchAction = async (req: Request, res: Response): Promise<void>
       throw new Error('Project URL is not set.');
     }
 
-    const actions: ActionRequest[] = req.body;
+    const actions: ActionConfig[] = req.body;
+    console.log(actions);
     for (const action of actions) {
       await executeAction(action);
     }

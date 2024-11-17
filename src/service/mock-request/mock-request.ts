@@ -11,11 +11,6 @@ export interface MockerData {
   mocker: Mocker;
 }
 
-interface MockerEndpointConfig {
-  endpoint: string;
-  callback: (data: MockerData) => Promise<unknown>;
-}
-
 export default class MockRequest {
   async importAsObjectList(): Promise<any> {
     try {
@@ -45,18 +40,18 @@ export default class MockRequest {
     }
   }
 
-  async addMockRoute(endpoint, callback) {
+  async addMockRoute(endpoint: string, callback: Function) {
     dynamicRouter.addRoute('post', `/mocker${endpoint}`, async (req: Request, res: Response) => {
       const _locale = req.body;
       const mocker = await new Mocker({ locale: _locale.locale || randomize(localeSupportList) }).initialize();
 
       try {
-        const mockData: MockerData = {
+        const data: MockerData = {
           payload: req.body,
           mocker: mocker
         };
 
-        const result = callback(endpoint, mockData) || {};
+        const result = callback({ endpoint, data }) || {};
 
         res.status(200).json({ data: await result });
       } catch (error) {

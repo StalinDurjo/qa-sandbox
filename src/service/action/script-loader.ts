@@ -5,6 +5,7 @@ import path from 'path';
 type ActionScriptInfo = {
   project: string;
   actionName: string;
+  actionType: string;
   repeat: number;
   actionSteps: string[];
   parameter: any[];
