@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { randomize, toFileUrl } from '@src/lib/util/util';
 import { dynamicRouter } from '@src/server/route/dynamic-router';
 import { localeSupportList } from '@src/constant';
-import {mockRequestRegistry} from "@src/service/mock-request/index";
-import Mocker from "@src/core/mocker/mocker";
+import { mockRequestRegistry } from '@src/service/mock-request/index';
+import Mocker from '@src/core/mocker/mocker';
+import logger from '@src/core/logger';
 
 export interface MockerData {
   payload: unknown;
@@ -19,8 +20,6 @@ export default class MockRequest {
   async importAsObjectList(): Promise<any> {
     try {
       const projectList = [];
-      // const registeredProjectList = mockRequestRegistry.getRegisteredProjects();
-
       const registeredProjectList = mockRequestRegistry.getItems();
 
       for (const project of registeredProjectList) {
@@ -80,5 +79,6 @@ export default class MockRequest {
         }
       }
     }
+    logger.info('Mock Request Dynamic Router Initialized.');
   }
 }

@@ -1,7 +1,7 @@
 import { toFileUrl } from '@src/lib/util/util';
 import ActionScriptLoader from './script-loader';
-import { database } from '../../core/database';
 import {actionRegistry} from "@src/service/action/index";
+import {database} from "@src/core/database";
 
 type ActionProjectClassInfo = {
   project: string;

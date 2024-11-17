@@ -7,7 +7,7 @@ const logLevels = {
   warn: 1,
   info: 2,
   http: 3,
-  debug: 4,
+  debug: 4
 };
 
 // Define colors for each log level
@@ -16,7 +16,7 @@ const logColors = {
   warn: 'yellow',
   info: 'green',
   http: 'magenta',
-  debug: 'white',
+  debug: 'white'
 };
 
 // Custom format for development logging
@@ -24,7 +24,7 @@ const developmentFormat = format.combine(
   format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   format.colorize({ colors: logColors }),
   format.printf(({ timestamp, level, message, service, ...metadata }) => {
-    let msg = `${timestamp} [${service || 'APP'}] ${level}: ${message}`;
+    let msg = `${timestamp} [${service || 'QA Sandbox'}] ${level}: ${message}`;
     if (Object.keys(metadata).length > 0) {
       msg += `\n${JSON.stringify(metadata, null, 2)}`;
     }
@@ -33,10 +33,7 @@ const developmentFormat = format.combine(
 );
 
 // Custom format for production logging (without colors, with JSON structure)
-const productionFormat = format.combine(
-  format.timestamp(),
-  format.json()
-);
+const productionFormat = format.combine(format.timestamp(), format.json());
 
 class Logger {
   private logger: winston.Logger;
@@ -48,50 +45,46 @@ class Logger {
 
     // Create transports
     const consoleTransport = new transports.Console({
-      level: isProduction ? 'info' : 'debug',
+      level: isProduction ? 'info' : 'debug'
     });
 
     const fileTransport = new transports.File({
-      filename: path.join(logsDir, 'app.log'),
+      filename: path.join(logsDir, 'logger.log'),
       level: isProduction ? 'info' : 'debug',
       maxsize: 5242880, // 5MB
-      maxFiles: 5,
+      maxFiles: 5
     });
 
     const errorFileTransport = new transports.File({
       filename: path.join(logsDir, 'error.log'),
       level: 'error',
       maxsize: 5242880, // 5MB
-      maxFiles: 5,
+      maxFiles: 5
     });
 
     this.logger = winston.createLogger({
       levels: logLevels,
       format: isProduction ? productionFormat : developmentFormat,
-      transports: [
-        consoleTransport,
-        fileTransport,
-        errorFileTransport
-      ],
+      transports: [consoleTransport, fileTransport, errorFileTransport],
       // Handle exceptions and rejections
       exceptionHandlers: [
         new transports.File({
           filename: path.join(logsDir, 'exceptions.log'),
           maxsize: 5242880, // 5MB
-          maxFiles: 5,
+          maxFiles: 5
         })
       ],
       rejectionHandlers: [
         new transports.File({
           filename: path.join(logsDir, 'rejections.log'),
           maxsize: 5242880, // 5MB
-          maxFiles: 5,
+          maxFiles: 5
         })
-      ],
+      ]
     });
 
     // Add error event handlers for transports
-    [fileTransport, errorFileTransport].forEach(transport => {
+    [fileTransport, errorFileTransport].forEach((transport) => {
       transport.on('error', this.handleTransportError);
     });
   }
@@ -138,7 +131,7 @@ class Logger {
     this.error(error.message, {
       stack: error.stack,
       context,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 
@@ -154,7 +147,7 @@ class Logger {
           status: res.statusCode,
           duration: `${duration}ms`,
           userAgent: req.get('user-agent'),
-          ip: req.ip,
+          ip: req.ip
         });
       });
       next();

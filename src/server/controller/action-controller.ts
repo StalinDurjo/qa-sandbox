@@ -52,6 +52,12 @@ const executeAction = async (actionConfig: ActionRequest): Promise<void> => {
 
 export const runSingleAction = async (req: Request, res: Response): Promise<void> => {
   try {
+    const projectUrl = await getProjectUrl()
+
+    if(!projectUrl){
+      throw new Error('Project URL is not set.');
+    }
+
     await executeAction(req.body);
     res.status(200).json({ message: 'Action executed successfully!' });
   } catch (error) {
@@ -62,8 +68,14 @@ export const runSingleAction = async (req: Request, res: Response): Promise<void
   }
 };
 
-export const runMultipleAction = async (req: Request, res: Response): Promise<void> => {
+export const runBatchAction = async (req: Request, res: Response): Promise<void> => {
   try {
+    const projectUrl = await getProjectUrl()
+
+    if(!projectUrl){
+      throw new Error('Project URL is not set.');
+    }
+
     const actions: ActionRequest[] = req.body;
     for (const action of actions) {
       await executeAction(action);
@@ -78,21 +90,41 @@ export const runMultipleAction = async (req: Request, res: Response): Promise<vo
 };
 
 const updateProjectUrl = async (url: string): Promise<void> => {
-  const initQuery = `
+  try{
+    const initQuery = `
     INSERT INTO options (action_project_base_url)
     SELECT 'testvalue'
     WHERE NOT EXISTS (SELECT 1 FROM options);
   `;
 
-  const updateQuery = `
+    const updateQuery = `
     UPDATE options
     SET action_project_base_url = ?
     WHERE rowid = (SELECT rowid FROM options ORDER BY rowid LIMIT 1);
   `;
 
-  await database.run(initQuery);
-  await database.run(updateQuery, [url]);
+    await database.run(initQuery);
+    await database.run(updateQuery, [url]);
+  }catch(error){
+    console.log('Failed to update action project URL.')
+    console.log(error)
+  }
+
 };
+
+const getProjectUrl = async () => {
+  try{
+    const initQuery = `
+    SELECT action_project_base_url from options;
+  `;
+
+    const data = await database.all(initQuery);
+    return data[0]['action_project_base_url']
+  }catch(error){
+    console.log('Failed to get action project URL.')
+    console.log(error)
+  }
+}
 
 export const setActionProjectUrl = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -107,6 +139,18 @@ export const setActionProjectUrl = async (req: Request, res: Response): Promise<
   } catch (error) {
     res.status(400).json({
       message: 'Something went wrong while setting Action project base URL.',
+      error
+    });
+  }
+};
+
+export const getActionProjectUrl = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const projectUrl = await getProjectUrl()
+    res.status(200).json({ message: 'Success!', url: projectUrl });
+  } catch (error) {
+    res.status(400).json({
+      message: 'Something went wrong while getting Action project base URL.',
       error
     });
   }

@@ -1,13 +1,13 @@
 import {BaseRegistry, RegistryItem} from "@src/core/registry/base-registry";
-import {DefaultRegistryValidator} from "@src/core/registry/registry-validator";
 import fs from "fs";
 import {actionRegistry} from "@src/service/action/index";
+import ActionValidator from "@src/service/action/action-validator";
 
 export class ActionRegistry extends BaseRegistry<RegistryItem> {
   constructor() {
     super(
       '/includes/actions/project',
-      new DefaultRegistryValidator()
+      new ActionValidator()
     );
   }
 

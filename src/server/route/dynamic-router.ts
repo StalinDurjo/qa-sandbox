@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import router from './route';
+import logger from '@src/core/logger';
 
 export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 
@@ -28,7 +29,7 @@ class DynamicRouter {
   private applyRoute(route: RouteConfig): void {
     if (this.router[route.method]) {
       this.router[route.method](route.path, route.handler);
-      console.log(`Added ${route.method.toUpperCase()} route for ${route.path}`);
+      logger.info(`Added ${route.method.toUpperCase()} route for ${route.path}`);
     } else {
       console.error(`Invalid HTTP method: ${route.method}`);
     }
@@ -36,6 +37,7 @@ class DynamicRouter {
 
   initialize(): void {
     this.dynamicRouteList.forEach((route) => this.applyRoute(route));
+    logger.info('Dynamic Routes Created.');
   }
 }
 

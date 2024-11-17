@@ -17,7 +17,7 @@ export abstract class BaseRegistry <T extends RegistryItem> {
   protected basePath: string;
   protected validator?: RegistryValidator<T>;
 
-  constructor(basePath: string, validator?: RegistryValidator<T>) {
+  protected constructor(basePath: string, validator?: RegistryValidator<T>) {
     this.basePath = basePath;
     this.validator = validator;
   }

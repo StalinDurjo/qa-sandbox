@@ -1,6 +1,6 @@
 import {RegistryItem, RegistryValidator} from "@src/core/registry/base-registry";
 
-export class DefaultRegistryValidator<T extends RegistryItem> implements RegistryValidator<T> {
+export default class DefaultRegistryValidator<T extends RegistryItem> implements RegistryValidator<T> {
   validate(items: T[]): T[] {
     const names = items.map((item) => item.name);
     const directories = items.map((item) => item.directory);
