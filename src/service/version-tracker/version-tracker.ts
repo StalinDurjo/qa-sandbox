@@ -52,7 +52,7 @@ export class VersionTracker {
       let context: BrowserContext;
 
       try {
-        browser = await chromium.launch({ headless: false, timeout: 120 * 1000 });
+        browser = await chromium.launch({ headless: true, timeout: 120 * 1000 });
         context = await browser.newContext();
         const page = await context.newPage();
         const data = await scraper({ page, targetDependency: config.dependency, targetUrl: config.targetUrl });
