@@ -1,25 +1,32 @@
-import { scheduler } from '@src/scheduler';
 import { DependencyDatabaseQueries } from './db-query';
-import { WebScraperLoader } from './scraper-loader';
 import { VersionTracker } from './version-tracker';
 import { VersionTrackerMessageDispatcher } from './dispatch';
+import { ScraperRegistry } from '@src/service/version-tracker/scraper-registry';
+import Scheduler from '@src/core/scheduler';
+import logger from '@src/core/logger';
 
-export const versionTracker = new VersionTracker(new DependencyDatabaseQueries(), new WebScraperLoader(), new VersionTrackerMessageDispatcher());
+export const scraperRegistry = new ScraperRegistry();
+export const versionTracker = new VersionTracker(new DependencyDatabaseQueries(), new VersionTrackerMessageDispatcher());
 
-scheduler.scheduleTask({
+(async () => {
+  await scraperRegistry.autoLoad();
+  await versionTracker.initialize();
+})();
+
+Scheduler.scheduleTask({
   name: 'run-tracker-for-unstored-dependencies',
   schedule: '0 */15 * * * *', // runs every 15 minute
   function: async () => {
-    console.log(`Task: 'run-tracker-for-unstored-dependencies' is running.`);
+    logger.info(`Task: 'run-tracker-for-unstored-dependencies' is running.`);
     await versionTracker.processUnstoredDependencies();
   }
 });
 
-scheduler.scheduleTask({
+Scheduler.scheduleTask({
   name: 'run-version-tracker',
   schedule: '0 */25 * * * *', // runs every 25 minute
   function: async () => {
-    console.log(`Task: 'run-version-tracker' is running.`);
+    logger.info(`Task: 'run-version-tracker' is running.`);
     await versionTracker.executeAllTrackers();
 
     const records = await versionTracker.database.getAllDependencyRecords();
@@ -32,7 +39,7 @@ scheduler.scheduleTask({
       }
     }
 
-    versionTracker.messageDispatcher.dispatch();
+    await versionTracker.messageDispatcher.dispatch();
     versionTracker.messageDispatcher.clearCollection();
 
     await versionTracker.moveCompareDataToStored();

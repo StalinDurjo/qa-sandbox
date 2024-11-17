@@ -1,9 +1,7 @@
-import { database } from '@src/service/database';
-import MockerProject from '@src/service/mocker-request/mocker-project';
+import { database } from 'src/core/database';
+import { MockerData } from '@src/service/mock-request/mock-request';
 
-const project = new MockerProject({ projectName: 'dokan' });
-
-project.addMethod({ endpoint: '/vendor-store' }, async (data) => {
+export async function fullUserDetails(endpoint = '/vendor-store', data: MockerData) {
   const mocker = data.mocker;
   const counter = await database.incrementCount();
   const location = await mocker.location.structuredAddress();
@@ -23,6 +21,4 @@ project.addMethod({ endpoint: '/vendor-store' }, async (data) => {
     postcode: location['postCode'],
     address: location['fullAddress']
   };
-});
-
-export default project;
+}

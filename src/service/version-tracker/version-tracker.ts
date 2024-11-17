@@ -1,17 +1,17 @@
+import { dependencies } from 'includes/version-tracker/dependency-list';
 import { DependencyDatabaseQueries } from './db-query';
-import { dependencies, DependencyConfig } from './dependency-list';
 import { VersionTrackerMessageDispatcher } from './dispatch';
-import { WebScraperLoader } from './scraper-loader';
+import { DepedencyVersionTracker } from '@src/type';
+import { scraperRegistry } from '@src/service/version-tracker/index';
+import { Browser, BrowserContext, chromium } from 'playwright';
 
 export class VersionTracker {
   constructor(
     readonly database: DependencyDatabaseQueries,
-    private readonly scraperLoader: WebScraperLoader,
     readonly messageDispatcher: VersionTrackerMessageDispatcher
   ) {}
 
   async initialize(): Promise<void> {
-    await this.scraperLoader.loadScrapers();
     await this.populateInitialData();
   }
 
@@ -38,18 +38,24 @@ export class VersionTracker {
     return records.some((record) => !record.stored_data && record.is_searchable === 1);
   }
 
-  async executeScrapers(configs?: DependencyConfig[], storeInCompareData: boolean = false): Promise<void> {
+  async executeScrapers(configs?: DepedencyVersionTracker.DependencyConfig[], storeInCompareData: boolean = false): Promise<void> {
     const targetsToScrape = configs || dependencies;
 
     for (const config of targetsToScrape) {
-      const scraper = this.scraperLoader.getScraper(config.scraper);
+      const scraper = scraperRegistry.getScraper(config.scraper);
       if (!scraper) {
         console.error(`No scraper found for: ${config.scraper}`);
         continue;
       }
 
+      let browser: Browser;
+      let context: BrowserContext;
+
       try {
-        const data = await scraper(config.dependency, config.targetUrl);
+        browser = await chromium.launch({ headless: true, timeout: 120 * 1000 });
+        context = await browser.newContext();
+        const page = await context.newPage();
+        const data = await scraper({ page, targetDependency: config.dependency, targetUrl: config.targetUrl });
 
         if (storeInCompareData) {
           await this.database.updateCompareData(config.scraper, config.dependency, JSON.stringify(data));
@@ -59,6 +65,9 @@ export class VersionTracker {
       } catch (error) {
         await this.database.updateIsSearchable(config.scraper, config.dependency, '0');
         console.error(`Error scraping ${config.dependency} with ${config.scraper}:`, error);
+      } finally {
+        await context.close();
+        await browser.close();
       }
     }
   }

@@ -6,98 +6,86 @@ import WooCommerceSiteVisibilityPage from '@pages/woocommerce/wp-admin/settings/
 import WoocommerceAccountsPrivacyPage from '@pages/woocommerce/wp-admin/woocommerce/settings/accounts-privacy.page';
 import WoocommerceGeneralSettingsPage from '@pages/woocommerce/wp-admin/woocommerce/settings/general.page';
 import WpThemePreviewPage from '@pages/wordpress/wp-admin/appearance/theme-preview.page';
-import AddNewPluginPage from '@pages/wordpress/wp-admin/plugins/add-new-plugin.page';
-import { database } from '@src/service/database';
-import Mocker from '@src/service/mocker/mocker';
+import { database } from 'src/core/database';
 import { Page } from 'playwright';
 
-// const baseUrl = process.env.ACTION_PROJECT_BASE_URL;
+export async function loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {
+  const loginPage = new WpLoginPage(page);
+  await page.goto(baseUrl + '/wp-login.php');
+  await loginPage.enterUsername(username);
+  await loginPage.enterPassword(password);
+  await loginPage.clickOnLogin();
+}
 
-export default class WoocommerceActionProject {
-  async loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {
-    const loginPage = new WpLoginPage(page);
-    await page.goto(baseUrl + '/wp-login.php');
-    await loginPage.enterUsername(username);
-    await loginPage.enterPassword(password);
-    await loginPage.clickOnLogin();
+export async function installAndActivateStorefrontTheme(actionStepName = 'install-and-activate-storefront-theme', page: Page, { baseUrl }) {
+  const themePreviewPage = new WpThemePreviewPage(page);
+  await page.goto(`${baseUrl}/wp-admin/theme-install.php?theme=storefront`, { waitUntil: 'networkidle' });
+
+  // install and activate theme
+  if (await themePreviewPage.installButton().isVisible()) {
+    await themePreviewPage.clickOnInstallButton();
+    await themePreviewPage.clickOnActivateButton();
+
+    // if theme is installed but not activated, then click on activate button
+  } else if (await themePreviewPage.activateButton().isVisible()) {
+    await themePreviewPage.clickOnActivateButton();
+  }
+}
+
+export async function installAndActivateWoocommercePlugin(actionStepName = 'install-and-activate-woocommerce-plugin', page: Page, { baseUrl }) {
+  const pageActions = new PageActions(page);
+  await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'WooCommerce', pluginProvider: 'Automattic', activate: true });
+}
+
+export async function disableSendPasswordSetupLink(actionStepName = 'disable-send-password-setup-link', page: Page, { baseUrl }) {
+  const accountsAndPrivacyPage = new WoocommerceAccountsPrivacyPage(page);
+  await page.goto(`${baseUrl}/wp-admin/admin.php?page=wc-settings&tab=account`);
+  const isMyAccountChecked = await accountsAndPrivacyPage.accountCreationOnMyAccountCheckbox().isChecked();
+
+  if (!isMyAccountChecked) {
+    await accountsAndPrivacyPage.clickOnAccountCreationCheckbox();
   }
 
-  async installAndActivateStorefrontTheme(actionStepName = 'install-and-activate-storefront-theme', page: Page, { baseUrl }) {
-    const themePreviewPage = new WpThemePreviewPage(page);
-    await page.goto(`${baseUrl}/wp-admin/theme-install.php?theme=storefront`, { waitUntil: 'networkidle' });
+  const isSendPasswordLinkChecked = await accountsAndPrivacyPage.sendPasswordSetupLinkCheckbox().isChecked();
 
-    // install and activate theme
-    if (await themePreviewPage.installButton().isVisible()) {
-      await themePreviewPage.clickOnInstallButton();
-      await themePreviewPage.clickOnActivateButton();
-
-      // if theme is installed but not activated, then click on activate button
-    } else if (await themePreviewPage.activateButton().isVisible()) {
-      await themePreviewPage.clickOnActivateButton();
-    }
+  if (isSendPasswordLinkChecked) {
+    await accountsAndPrivacyPage.clickOnSendPasswordSetupLinkCheckbox();
   }
 
-  async installAndActivateWoocommercePlugin(actionStepName = 'install-and-activate-woocommerce-plugin', page: Page, { baseUrl }) {
-    const pageActions = new PageActions(page);
-    await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'WooCommerce', pluginProvider: 'Automattic', activate: true });
+  await accountsAndPrivacyPage.clickOnSaveChanges();
+}
+
+export async function enableTaxRates(actionStepName = 'enable-tax-rates', page: Page, { baseUrl }) {
+  const generalSettingsPage = new WoocommerceGeneralSettingsPage(page);
+  await page.goto(`${baseUrl}/wp-admin/admin.php?page=wc-settings&tab=general`);
+
+  const isEnableTaxChecked = await generalSettingsPage.enableTaxRatesCheckbox().isChecked();
+
+  if (!isEnableTaxChecked) {
+    await generalSettingsPage.clickOnEnableTaxRatesCheckbox();
   }
 
-  async disableSendPasswordSetupLink(actionStepName = 'disable-send-password-setup-link', page: Page, { baseUrl }) {
-    const accountsAndPrivacyPage = new WoocommerceAccountsPrivacyPage(page);
-    await page.goto(`${baseUrl}/wp-admin/admin.php?page=wc-settings&tab=account`);
-    const isMyAccountChecked = await accountsAndPrivacyPage.accountCreationOnMyAccountCheckbox().isChecked();
+  await generalSettingsPage.clickOnSaveChanges();
+}
 
-    if (!isMyAccountChecked) {
-      await accountsAndPrivacyPage.clickOnAccountCreationCheckbox();
-    }
+export async function setSiteVisibilityToLive(actionStepName = 'set-site-visibility-to-live', page: Page, { baseUrl }) {
+  await page.goto(baseUrl + '/wp-admin/admin.php?page=wc-settings&tab=site-visibility');
+  const woocommerceSiteVisibilityPage = new WooCommerceSiteVisibilityPage(page);
+  await woocommerceSiteVisibilityPage.clickOnLiveRadioElement();
+  await woocommerceSiteVisibilityPage.clickOnSaveChanges();
+}
 
-    const isSendPasswordLinkChecked = await accountsAndPrivacyPage.sendPasswordSetupLinkCheckbox().isChecked();
+export async function createCustomer(actionStepName = 'create-customer', page: Page, { baseUrl }) {
+  await page.goto(baseUrl + '/my-account/');
+  const myAccountsPage = new MyAccountAuthPage(page);
+  const dokanMyAccountsPage = new DokanMyAccountAuthPage(page);
 
-    if (isSendPasswordLinkChecked) {
-      await accountsAndPrivacyPage.clickOnSendPasswordSetupLinkCheckbox();
-    }
-
-    await accountsAndPrivacyPage.clickOnSaveChanges();
+  if (await dokanMyAccountsPage.imCustomerCheckbox().isVisible()) {
+    await dokanMyAccountsPage.clickOnImCustomerCheckbox();
   }
 
-  async enableTaxRates(actionStepName = 'enable-tax-rates', page: Page, { baseUrl }) {
-    const generalSettingsPage = new WoocommerceGeneralSettingsPage(page);
-    await page.goto(`${baseUrl}/wp-admin/admin.php?page=wc-settings&tab=general`);
-
-    const isEnableTaxChecked = await generalSettingsPage.enableTaxRatesCheckbox().isChecked();
-
-    if (!isEnableTaxChecked) {
-      await generalSettingsPage.clickOnEnableTaxRatesCheckbox();
-    }
-
-    await generalSettingsPage.clickOnSaveChanges();
-  }
-
-  async setSiteVisibilityToLive(actionStepName = 'set-site-visibility-to-live', page: Page, { baseUrl }) {
-    await page.goto(baseUrl + '/wp-admin/admin.php?page=wc-settings&tab=site-visibility');
-    const woocommerceSiteVisibilityPage = new WooCommerceSiteVisibilityPage(page);
-    await woocommerceSiteVisibilityPage.clickOnLiveRadioElement();
-    await woocommerceSiteVisibilityPage.clickOnSaveChanges();
-  }
-
-  async createCustomer(actionStepName = 'create-customer', page: Page, { baseUrl }) {
-    await page.goto(baseUrl + '/my-account/');
-    const myAccountsPage = new MyAccountAuthPage(page);
-    const dokanMyAccountsPage = new DokanMyAccountAuthPage(page);
-
-    if (await dokanMyAccountsPage.imCustomerCheckbox().isVisible()) {
-      await dokanMyAccountsPage.clickOnImCustomerCheckbox();
-    }
-
-    await myAccountsPage.enterRegisterEmail('customer1@email.com');
-    await myAccountsPage.enterRegisterPassword('01Testing01!');
-    await page.keyboard.press('Enter');
-
-    if (myAccountsPage.woocommerceErrorUlElement().isVisible()) {
-      const counter = await database.incrementCount();
-      await myAccountsPage.enterRegisterEmail(`customer${counter + 1}@email.com`);
-      await myAccountsPage.enterRegisterPassword('01Testing01!');
-      await page.keyboard.press('Enter');
-    }
-  }
+  const counter = await database.incrementCount();
+  await myAccountsPage.enterRegisterEmail(`customer${counter}@email.com`);
+  await myAccountsPage.enterRegisterPassword('01Test01!');
+  await page.keyboard.press('Enter');
 }

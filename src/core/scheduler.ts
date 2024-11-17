@@ -14,11 +14,19 @@ interface ScheduledTask extends TaskConfig {
   status: 'scheduled' | 'running' | 'completed' | 'failed';
 }
 
-export class TaskSchedulerService {
+class Scheduler {
+  private static instance: Scheduler
   private tasks: Map<string, ScheduledTask> = new Map();
   private taskQueue: string[] = [];
 
   constructor() {}
+
+  public static getInstance(): Scheduler {
+    if (!Scheduler.instance) {
+      Scheduler.instance = new Scheduler();
+    }
+    return Scheduler.instance;
+  }
 
   scheduleTask(config: TaskConfig): void {
     if (this.tasks.has(config.name)) {
@@ -109,4 +117,4 @@ export class TaskSchedulerService {
   }
 }
 
-export const scheduler = new TaskSchedulerService();
+export default Scheduler.getInstance()

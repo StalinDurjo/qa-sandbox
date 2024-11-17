@@ -1,26 +1,27 @@
 import '@testConfig';
 import { initServer } from './server/server';
-import './service/action'
-import '../includes/mocker/register';
-import { initializeDatabase } from './service/database';
-import { initializeMockData } from './service/mocker';
+import { initializeDatabase } from './core/database';
+import './service/action';
 import { dynamicRouter } from './server/route/dynamic-router';
-import { mockerRegistry } from './service/mocker-request/mocker-registry';
 import './service/mailer/mailer';
-import './scheduler';
-import { versionTracker } from './service/version-tracker';
+import './core/scheduler';
+import './service/version-tracker';
+import { mockRequest } from './service/mock-request';
+import { initializeMockData } from './core/mocker';
 
 (async () => {
-  // start local server
-  await initServer();
-  // create database and its tables
-  await initializeDatabase();
-  // populate database with mock data
-  await initializeMockData();
-  // initialize mocker projects
-  await mockerRegistry.initialize();
-  // initialize the creation of dynamic routes
-  dynamicRouter.initialize();
-
-  await versionTracker.initialize();
+  try {
+    // start local server
+    await initServer();
+    // create database and its tables
+    await initializeDatabase();
+    // populate database with mock data
+    await initializeMockData();
+    // initialize dynamic routes for mock request
+    await mockRequest.initializeRoutes();
+    // initialize the creation of dynamic routes
+    dynamicRouter.initialize();
+  } catch (error) {
+    console.log(error);
+  }
 })();

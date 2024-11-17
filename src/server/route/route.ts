@@ -1,13 +1,19 @@
-import express, { Request, Response } from 'express';
-import { runMultipleAction, runSingleAction, setActionProjectUrl } from '../controller/action-controller';
+import express from 'express';
+import {
+  getActionProjectUrl,
+  runBatchAction,
+  runSingleAction,
+  setActionProjectUrl
+} from '../controller/action-controller';
+import {baseUrlFunction, healthStatus} from "@src/server/controller/system-controller";
 const router = express.Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.send('Test Server!');
-});
+router.get('/', baseUrlFunction);
+router.get('/health', healthStatus);
 
-router.post('/run-action', runSingleAction);
-router.post('/run-multiple-action', runMultipleAction);
-router.post('/set-action-project-url', setActionProjectUrl);
+router.post('/action/run-single', runSingleAction);
+router.post('/action/run-batch', runBatchAction);
+router.post('/action/set-project-url', setActionProjectUrl);
+router.post('/action/get-project-url', getActionProjectUrl);
 
 export default router;

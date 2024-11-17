@@ -4,61 +4,59 @@ import DokanSellingOptionsPage from '@pages/dokan/wp-admin/dokan/settings/sellin
 import DokanSettingsSidebarPage from '@pages/dokan/wp-admin/dokan/settings/settings-sidebar.page';
 import PageActions from '@pages/page-actions/page-actions';
 import WoocommerceMyAccountAuthPage from '@pages/woocommerce/frontend/my-account/auth/my-account-auth.page';
-import { database } from '@src/service/database';
+import { database } from 'src/core/database';
 import { Page } from 'playwright';
 
-export default class DokanActionProject {
-  async loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {
-    await page.goto(baseUrl + '/wp-login.php');
-    const pageActions = new PageActions(page);
-    await pageActions.loginToAdmin({ username, password });
-  }
+export async function loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {
+  await page.goto(baseUrl + '/wp-login.php');
+  const pageActions = new PageActions(page);
+  await pageActions.loginToAdmin({ username, password });
+}
 
-  async setProductStatusToPublished(actionStepName = 'set-product-status-to-published', page: Page, { baseUrl }) {
-    await page.goto(baseUrl + '/wp-admin/admin.php?page=dokan#/settings');
+export async function setProductStatusToPublished(actionStepName = 'set-product-status-to-published', page: Page, { baseUrl }) {
+  await page.goto(baseUrl + '/wp-admin/admin.php?page=dokan#/settings');
 
-    const dokanSettingsSidebarPage = new DokanSettingsSidebarPage(page);
-    const sellingOptionsPage = new DokanSellingOptionsPage(page);
-    await dokanSettingsSidebarPage.clickOnSidebarMenu('Selling Options');
+  const dokanSettingsSidebarPage = new DokanSettingsSidebarPage(page);
+  const sellingOptionsPage = new DokanSellingOptionsPage(page);
+  await dokanSettingsSidebarPage.clickOnSidebarMenu('Selling Options');
 
-    if (await sellingOptionsPage.productStatusPublishedRadioElement().isVisible()) {
-      await sellingOptionsPage.clickOnPublishedRadioButton();
+  if (await sellingOptionsPage.productStatusPublishedRadioElement().isVisible()) {
+    await sellingOptionsPage.clickOnPublishedRadioButton();
 
-      if (!(await page.locator(`#dokan-license-expired-modal`).isVisible())) {
-        await sellingOptionsPage.clickOnSaveChanges();
-      }
+    if (!(await page.locator(`#dokan-license-expired-modal`).isVisible())) {
+      await sellingOptionsPage.clickOnSaveChanges();
     }
   }
+}
 
-  async createVendor(actionStepName = 'create-vendor', page: Page, { baseUrl, password }) {
-    await page.goto(baseUrl + '/my-account/');
-    const myAccountsPage = new WoocommerceMyAccountAuthPage(page);
-    const dokanMyAccountsPage = new DokanMyAccountAuthPage(page);
+export async function createVendor(actionStepName = 'create-vendor', page: Page, { baseUrl, password }) {
+  await page.goto(baseUrl + '/my-account/');
+  const myAccountsPage = new WoocommerceMyAccountAuthPage(page);
+  const dokanMyAccountsPage = new DokanMyAccountAuthPage(page);
 
-    await dokanMyAccountsPage.clickOnImVendorCheckbox();
+  await dokanMyAccountsPage.clickOnImVendorCheckbox();
 
-    const counter = await database.incrementCount();
-    await myAccountsPage.enterRegisterEmail(`vendor${counter}@email.com`);
-    await myAccountsPage.enterRegisterPassword(password);
+  const counter = await database.incrementCount();
+  await myAccountsPage.enterRegisterEmail(`vendor${counter}@email.com`);
+  await myAccountsPage.enterRegisterPassword(password);
 
-    await dokanMyAccountsPage.enterFirstName(`Vendor${counter}`);
-    await dokanMyAccountsPage.enterLastName(`_${counter}`);
-    await dokanMyAccountsPage.enterShopName(`vendor${counter}`);
-    await dokanMyAccountsPage.enterShopPhoneNumber(`0987654321`);
-    await page.keyboard.press('Enter');
-  }
+  await dokanMyAccountsPage.enterFirstName(`Vendor${counter}`);
+  await dokanMyAccountsPage.enterLastName(`_${counter}`);
+  await dokanMyAccountsPage.enterShopName(`vendor${counter}`);
+  await dokanMyAccountsPage.enterShopPhoneNumber(`0987654321`);
+  await page.keyboard.press('Enter');
+}
 
-  async completeVendorSetupWizard(actionStepName = 'complete-vendor-setup-wizard', page: Page) {
-    const sellerSetupPage = new DokanSellerSetupPage(page);
+export async function completeVendorSetupWizard(actionStepName = 'complete-vendor-setup-wizard', page: Page) {
+  const sellerSetupPage = new DokanSellerSetupPage(page);
 
-    await sellerSetupPage.clickOnLetsGoButton();
-    await sellerSetupPage.enterStreet1('One Apple Park Way');
-    await sellerSetupPage.enterCity('Cupertino');
-    await sellerSetupPage.enterZipCode('95014');
-    await sellerSetupPage.selectCountry('United States (US)');
-    await sellerSetupPage.selectState('California');
-    await sellerSetupPage.clickOnContinueButton();
-    await sellerSetupPage.clickOnSkipButton();
-    await sellerSetupPage.clickOnGoToDashboardButton();
-  }
+  await sellerSetupPage.clickOnLetsGoButton();
+  await sellerSetupPage.enterStreet1('One Apple Park Way');
+  await sellerSetupPage.enterCity('Cupertino');
+  await sellerSetupPage.enterZipCode('95014');
+  await sellerSetupPage.selectCountry('United States (US)');
+  await sellerSetupPage.selectState('California');
+  await sellerSetupPage.clickOnContinueButton();
+  await sellerSetupPage.clickOnSkipButton();
+  await sellerSetupPage.clickOnGoToDashboardButton();
 }
