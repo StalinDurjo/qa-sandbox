@@ -17,6 +17,7 @@ const executeUIAction = async (action: Action, actionConfig: ActionRequest): Pro
   const browser = new BrowserUtil();
   try {
     const page = await browser.createInstance({ headless: false });
+    console.log('config', actionConfig);
     await action.run(page, actionConfig);
   } finally {
     await browser.closeInstance();
@@ -31,15 +32,19 @@ const executeAction = async (actionConfig: ActionRequest): Promise<void> => {
   const actionScript = new ActionScriptLoader();
   const action = new Action();
 
-  const actionType = actionConfig.actionType || 'UI';
+  // const actionType = actionConfig.actionType || 'UI';
   const script = actionScript.loadScript({
     project: actionConfig.project,
     actionName: actionConfig.actionName
   });
 
+  console.log(script);
+
   const repeatCount = actionConfig.repeat ?? script[0].repeat;
 
   for (let i = 0; i < repeatCount; i++) {
+    const actionType = actionConfig.actionType || script[0]['actionType'] || 'UI';
+
     if (actionType === 'UI') {
       await executeUIAction(action, actionConfig);
     } else if (actionType === 'API') {

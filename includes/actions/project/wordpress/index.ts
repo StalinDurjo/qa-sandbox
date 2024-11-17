@@ -2,22 +2,21 @@ import PageActions from '@pages/page-actions/page-actions';
 import PermalinkSettingsPage from '@pages/woocommerce/wp-admin/settings/permalink-settings.page';
 import WordpressSetupPage from '@pages/wordpress/wordpress-setup.page';
 import WpGeneralSettingsPage from '@pages/wordpress/wp-admin/settings/general-settings.page';
-import { Page } from 'playwright';
 
-export async function loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {
+export async function loginToAdmin({ actionStepName = 'login-to-admin', page, scriptParams: { username, password, baseUrl } }) {
   await page.goto(baseUrl + '/wp-login.php');
   const pageActions = new PageActions(page);
   await pageActions.loginToAdmin({ username, password });
 }
 
-export async function changePermalink(actionStepName = 'change-permalink', page: Page, { permalinkType, baseUrl }) {
+export async function changePermalink({ actionStepName = 'change-permalink', page, scriptParams: { permalinkType, baseUrl } }) {
   const permalinkSettingsPage = new PermalinkSettingsPage(page);
   await page.goto(baseUrl + '/wp-admin/options-permalink.php');
   await permalinkSettingsPage.selectPermalinkStructure(permalinkType);
   await permalinkSettingsPage.clickOnSaveChanges();
 }
 
-export async function selectSetupLanguage(actionStepName = 'select-setup-language', page: Page, { language = 'English (United States)', baseUrl }) {
+export async function selectSetupLanguage({ actionStepName = 'select-setup-language', page, scriptParams: { language = 'English (United States)', baseUrl } }) {
   const wordpressSetupPage = new WordpressSetupPage(page);
   await page.goto(baseUrl + '/wp-admin/setup-config.php');
 
@@ -33,7 +32,7 @@ export async function selectSetupLanguage(actionStepName = 'select-setup-languag
   }
 }
 
-export async function wordpressDatabaseSetup(actionStepName = 'setup-wordpress-database', page: Page, { databaseName, username, password, baseUrl }) {
+export async function wordpressDatabaseSetup({ actionStepName = 'setup-wordpress-database', page, scriptParams: { databaseName, username, password, baseUrl } }) {
   const wordpressSetupPage = new WordpressSetupPage(page);
 
   // database name input field is used as an indicator to see if this page is visible
@@ -66,7 +65,7 @@ export async function wordpressDatabaseSetup(actionStepName = 'setup-wordpress-d
   }
 }
 
-export async function wordpressAdminSiteSetup(actionStepName = 'setup-wordpress-admin-site', page: Page, { siteTitle, username, password, email, baseUrl }) {
+export async function wordpressAdminSiteSetup({ actionStepName = 'setup-wordpress-admin-site', page, scriptParams: { siteTitle, username, password, email, baseUrl } }) {
   const wordpressSetupPage = new WordpressSetupPage(page);
   await page.goto(baseUrl + `/wp-admin/install.php?step=1`);
 
@@ -80,29 +79,29 @@ export async function wordpressAdminSiteSetup(actionStepName = 'setup-wordpress-
   }
 }
 
-export async function setAnyoneCanRegister(actionStepName = 'set-on-anyone-can-register', page: Page, { baseUrl }) {
+export async function setAnyoneCanRegister({ actionStepName = 'set-on-anyone-can-register', page, scriptParams: { baseUrl } }) {
   const generalSettingsPage = new WpGeneralSettingsPage(page);
   await page.goto(baseUrl + '/wp-admin/options-general.php');
   await generalSettingsPage.clickOnSetAnyoneCanRegister();
   await generalSettingsPage.submit('Save Changes').click();
 }
 
-export async function installAndActivateEmailLogPlugin(actionStepName = 'install-and-activate-email-log-plugin', page: Page, { baseUrl }) {
+export async function installAndActivateEmailLogPlugin({ actionStepName = 'install-and-activate-email-log-plugin', page, scriptParams: { baseUrl } }) {
   const pageActions = new PageActions(page);
   await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'Email Log', pluginProvider: 'Sudar', activate: true });
 }
 
-export async function installPDFInvoicePlugin(actionStepName = 'install-pdf-invoice-and-packing-plugin', page: Page, { baseUrl }) {
+export async function installPDFInvoicePlugin({ actionStepName = 'install-pdf-invoice-and-packing-plugin', page, scriptParams: { baseUrl } }) {
   const pageActions = new PageActions(page);
   await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'PDF Invoices & Packing Slips for WooCommerce', pluginProvider: 'WP Overnight' });
 }
 
-export async function installAndActivateWpConsolePlugin(actionStepName = 'install-and-activate-wp-console-plugin', page: Page, { baseUrl }) {
+export async function installAndActivateWpConsolePlugin({ actionStepName = 'install-and-activate-wp-console-plugin', page, scriptParams: { baseUrl } }) {
   const pageActions = new PageActions(page);
   await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'WP Console – WordPress PHP Console powered by PsySH', pluginProvider: 'Edi Amin', activate: true });
 }
 
-export async function installDokanInvoicePlugin(actionStepName = 'install-dokan-invoice-plugin', page: Page, { baseUrl }) {
+export async function installDokanInvoicePlugin({ actionStepName = 'install-dokan-invoice-plugin', page, scriptParams: { baseUrl } }) {
   const pageActions = new PageActions(page);
   await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'WP Console – WordPress PHP Console powered by PsySH', pluginProvider: 'Edi Amin' });
 }
