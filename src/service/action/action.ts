@@ -1,7 +1,8 @@
 import { toFileUrl } from '@src/lib/util/util';
 import ActionScriptLoader from './script-loader';
-import {actionRegistry} from "@src/service/action/index";
-import {database} from "@src/core/database";
+import { actionRegistry } from '@src/service/action/index';
+import { database } from '@src/core/database';
+import { ActionConfig } from '@src/server/controller/action-controller';
 
 type ActionProjectClassInfo = {
   project: string;
@@ -41,32 +42,43 @@ export default class Action {
         return data.properties;
       });
 
-      return Object.keys(properties).map((key) => properties[key])
+      return Object.keys(properties).map((key) => properties[key]);
     } catch (error) {
       throw new Error('Something went wrong while returning project actions steps as list \n' + error);
     }
   }
 
-  async run(_object: unknown, param: any) {
-    const [actions] = this.actionScriptLoader.loadScript({ project: param['project'], actionName: param['actionName'] });
+  async run(_object: unknown, config: ActionConfig) {
+    const [actions] = this.actionScriptLoader.loadScript({ project: config.project, actionName: config.actionName });
 
     for (const actionStep of actions.actionSteps) {
-      const action = (await this.loadStepMethods({ project: param['project'] })).find((data) => this.getStepName(data) === actionStep);
+      const action = (await this.loadStepMethods({ project: config.project })).find((data) => this.getStepName(data) === actionStep);
 
       if (this.getStepName(action) === actionStep) {
         const [parameterObject] = this.actionScriptLoader
           .loadParameter()
-          .filter((obj) => obj._function === actionStep && obj.project === param['project'] && obj.actionName === param['actionName']);
+          .filter((obj) => obj._function === actionStep && obj.project === config.project && obj.actionName === config.actionName);
 
         const parameters = { ...parameterObject.parameter };
 
-        for (const key in param) {
+        for (const key in config) {
           if (key in parameters) {
-            parameters[key] = param[key];
+            parameters[key] = config[key];
           }
         }
 
-        await action(null, _object, { ...parameters, baseUrl: await this.actionProjectBaseUrl() });
+        const baseUrl = await this.actionProjectBaseUrl();
+        const actionType = config.actionType ? config.actionType : actions.actionType;
+
+        switch (actionType) {
+          case 'UI':
+            await action({ actionStep, page: _object, parameter: { ...parameters, baseUrl } });
+            break;
+          case 'API':
+            await action({ actionStep, request: _object, parameter: { ...parameters, baseUrl } });
+          default:
+            await action({ actionStep, obj: _object, parameter: { ...parameters, baseUrl } });
+        }
       }
     }
   }

@@ -7,9 +7,8 @@ import WoocommerceAccountsPrivacyPage from '@pages/woocommerce/wp-admin/woocomme
 import WoocommerceGeneralSettingsPage from '@pages/woocommerce/wp-admin/woocommerce/settings/general.page';
 import WpThemePreviewPage from '@pages/wordpress/wp-admin/appearance/theme-preview.page';
 import { database } from 'src/core/database';
-import { Page } from 'playwright';
 
-export async function loginToAdmin(actionStepName = 'login-to-admin', page: Page, { username, password, baseUrl }) {
+export async function loginToAdmin({ actionStepName = 'login-to-admin', page, parameter: { username, password, baseUrl } }) {
   const loginPage = new WpLoginPage(page);
   await page.goto(baseUrl + '/wp-login.php');
   await loginPage.enterUsername(username);
@@ -17,7 +16,7 @@ export async function loginToAdmin(actionStepName = 'login-to-admin', page: Page
   await loginPage.clickOnLogin();
 }
 
-export async function installAndActivateStorefrontTheme(actionStepName = 'install-and-activate-storefront-theme', page: Page, { baseUrl }) {
+export async function installAndActivateStorefrontTheme({ actionStepName = 'install-and-activate-storefront-theme', page, parameter: { baseUrl } }) {
   const themePreviewPage = new WpThemePreviewPage(page);
   await page.goto(`${baseUrl}/wp-admin/theme-install.php?theme=storefront`, { waitUntil: 'networkidle' });
 
@@ -32,12 +31,12 @@ export async function installAndActivateStorefrontTheme(actionStepName = 'instal
   }
 }
 
-export async function installAndActivateWoocommercePlugin(actionStepName = 'install-and-activate-woocommerce-plugin', page: Page, { baseUrl }) {
+export async function installAndActivateWoocommercePlugin({ actionStepName = 'install-and-activate-woocommerce-plugin', page, parameter: { baseUrl } }) {
   const pageActions = new PageActions(page);
   await pageActions.installWordpressPlugin({ baseUrl, pluginName: 'WooCommerce', pluginProvider: 'Automattic', activate: true });
 }
 
-export async function disableSendPasswordSetupLink(actionStepName = 'disable-send-password-setup-link', page: Page, { baseUrl }) {
+export async function disableSendPasswordSetupLink({ actionStepName = 'disable-send-password-setup-link', page, parameter: { baseUrl } }) {
   const accountsAndPrivacyPage = new WoocommerceAccountsPrivacyPage(page);
   await page.goto(`${baseUrl}/wp-admin/admin.php?page=wc-settings&tab=account`);
   const isMyAccountChecked = await accountsAndPrivacyPage.accountCreationOnMyAccountCheckbox().isChecked();
@@ -55,7 +54,7 @@ export async function disableSendPasswordSetupLink(actionStepName = 'disable-sen
   await accountsAndPrivacyPage.clickOnSaveChanges();
 }
 
-export async function enableTaxRates(actionStepName = 'enable-tax-rates', page: Page, { baseUrl }) {
+export async function enableTaxRates({ actionStepName = 'enable-tax-rates', page, parameter: { baseUrl } }) {
   const generalSettingsPage = new WoocommerceGeneralSettingsPage(page);
   await page.goto(`${baseUrl}/wp-admin/admin.php?page=wc-settings&tab=general`);
 
@@ -68,14 +67,14 @@ export async function enableTaxRates(actionStepName = 'enable-tax-rates', page: 
   await generalSettingsPage.clickOnSaveChanges();
 }
 
-export async function setSiteVisibilityToLive(actionStepName = 'set-site-visibility-to-live', page: Page, { baseUrl }) {
+export async function setSiteVisibilityToLive({ actionStepName = 'set-site-visibility-to-live', page, parameter: { baseUrl } }) {
   await page.goto(baseUrl + '/wp-admin/admin.php?page=wc-settings&tab=site-visibility');
   const woocommerceSiteVisibilityPage = new WooCommerceSiteVisibilityPage(page);
   await woocommerceSiteVisibilityPage.clickOnLiveRadioElement();
   await woocommerceSiteVisibilityPage.clickOnSaveChanges();
 }
 
-export async function createCustomer(actionStepName = 'create-customer', page: Page, { baseUrl }) {
+export async function createCustomer({ actionStepName = 'create-customer', page, parameter: { baseUrl } }) {
   await page.goto(baseUrl + '/my-account/');
   const myAccountsPage = new MyAccountAuthPage(page);
   const dokanMyAccountsPage = new DokanMyAccountAuthPage(page);
