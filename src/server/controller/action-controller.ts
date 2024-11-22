@@ -79,7 +79,6 @@ export const runBatchAction = async (req: Request, res: Response): Promise<void>
     }
 
     const actions: ActionConfig[] = req.body;
-    console.log(actions);
     for (const action of actions) {
       await executeAction(action);
     }

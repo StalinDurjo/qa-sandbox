@@ -13,7 +13,7 @@ export const dashboardController = async (req: Request, res: Response): Promise<
     res.render('dashboard', {
       pageTitle: 'Dashboard',
       activePage: 'dashboard',
-      username: 'req.user.name',
+      username: '',
       data: data // for the table
     });
 

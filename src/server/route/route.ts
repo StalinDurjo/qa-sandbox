@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { getActionProjectUrl, runBatchAction, runSingleAction, setActionProjectUrl } from '../controller/action-controller';
 import { baseUrlFunction, healthStatus } from '@src/server/controller/system-controller';
-import { countryDatabaseTable } from '../controller/database-controller';
+import { countryDatabaseTable, subdivisionDatabaseTable } from '../controller/database-controller';
 import { dashboardController } from '../controller/dashboard-controller';
 const router = express.Router();
 
@@ -16,5 +16,6 @@ router.get('/action/get-project-url', getActionProjectUrl);
 router.get('/dashboard', dashboardController);
 
 router.get('/database/country', countryDatabaseTable);
+router.get('/database/subdivision', subdivisionDatabaseTable);
 
 export default router;

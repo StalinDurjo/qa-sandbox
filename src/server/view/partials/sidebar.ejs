@@ -11,12 +11,20 @@
       <li>
         <button onclick="toggleSubmenu('users-submenu')" class="w-full flex items-center px-2 py-1.5 text-xs hover:bg-slate-50 text-slate-700">
           <i class="fas fa-users w-4 text-slate-400"></i>
-          <span class="ml-2">Users</span>
+          <span class="ml-2">Database</span>
           <i id="icon-users-submenu" class="fas fa-chevron-right ml-auto text-slate-400 text-xs chevron-icon"></i>
         </button>
         <ul id="users-submenu" class="submenu bg-slate-50">
-          <li><a href="/users" class="block pl-8 pr-2 py-1 text-xs text-slate-600 hover:bg-slate-100 <%= activePage === 'users-all' ? 'bg-slate-100' : '' %>">All Users</a></li>
-          <li><a href="/users/add" class="block pl-8 pr-2 py-1 text-xs text-slate-600 hover:bg-slate-100 <%= activePage === 'users-add' ? 'bg-slate-100' : '' %>">Add User</a></li>
+          <li>
+            <a href="/database/country" class="block pl-8 pr-2 py-1 text-xs text-slate-600 hover:bg-slate-100 <%= activePage === 'users-all' ? 'bg-slate-100' : '' %>"
+              >Country Table</a
+            >
+          </li>
+          <li>
+            <a href="/database/subdivision" class="block pl-8 pr-2 py-1 text-xs text-slate-600 hover:bg-slate-100 <%= activePage === 'users-add' ? 'bg-slate-100' : '' %>"
+              >Sub Division Table</a
+            >
+          </li>
           <li>
             <a href="/users/groups" class="block pl-8 pr-2 py-1 text-xs text-slate-600 hover:bg-slate-100 <%= activePage === 'users-groups' ? 'bg-slate-100' : '' %>">Groups</a>
           </li>

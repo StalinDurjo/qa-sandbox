@@ -1,23 +1,34 @@
+import { database } from '@src/core/database';
 import { Request, Response } from 'express';
 
 export const countryDatabaseTable = async (req: Request, res: Response): Promise<void> => {
   try {
-    const data = [
-      { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-      { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-      { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Editor' },
-      { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'User' },
-      { id: 5, name: 'Charlie Wilson', email: 'charlie@example.com', role: 'Admin' }
-    ];
+    const countryList = await database.all('select * from country');
 
     res.render('database-content/country', {
-      pageTitle: 'Dashboard',
+      pageTitle: 'Country Table',
       activePage: 'dashboard',
-      username: 'req.user.name',
-      data: data // for the table
+      username: '',
+      data: countryList // for the table
     });
+  } catch (error) {
+    res.status(400).json({
+      message: 'Something went wrong!',
+      error
+    });
+  }
+};
 
-    // res.render('database-content/country', { data });
+export const subdivisionDatabaseTable = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const list = await database.all('select * from subdivision');
+
+    res.render('database-content/subdivision', {
+      pageTitle: 'Sub Division Table',
+      activePage: 'dashboard',
+      username: '',
+      data: list // for the table
+    });
   } catch (error) {
     res.status(400).json({
       message: 'Something went wrong!',
