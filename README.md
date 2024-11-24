@@ -97,11 +97,11 @@ test.config.ts
 
 #### Default Mock API Endpoints
 
-| Method | Endpoint                  | Description         |
-| ------ | ------------------------- | ------------------- |
-| POST   | /mocker/full-user-details | Get full users      |
-| POST   | /mocker/user-details      | Get limited details |
-| POST   | /mocker/bank-details      | Get bank details    |
+| Method | Endpoint                  | Description            |
+| ------ | ------------------------- | ---------------------- |
+| POST   | /mocker/full-user-details | Get full users details |
+| POST   | /mocker/user-details      | Get limited details    |
+| POST   | /mocker/bank-details      | Get bank details       |
 
 Example usage:
 
@@ -120,10 +120,12 @@ Note: The request body accepts a `locale` property (2-digit country code, defaul
 
 #### Mock Implementation Structure
 
-The mock implementation requires two main components:
+The mock parameter has two main components:
 
 1. **Endpoint Definition**: The `endpoint` property must be defined with a value that will serve as the REST API route
-2. **Data Implementation**: The function must return a value that will serve as the response body
+2. **Data Object**: `data` - Provides access to the payload of the API request and the built-in `mocker` library. This mocker library will be used to generate the mock data. The payload (or request body) is passed on to the function to allow for custom logic implementation.
+
+**Function Return**: The function must return a value that will serve as the response body
 
 ```typescript
 export async function customMock({ endpoint, data }) {
