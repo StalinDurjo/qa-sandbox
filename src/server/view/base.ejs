@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %> | YourSaaS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <script>
+        function toggleSubmenu(id) {
+          const submenu = document.getElementById(id);
+          const icon = document.getElementById(`icon-${id}`);
+          submenu.classList.toggle('open');
+          icon.classList.toggle('rotated');
+        }
+      </script>
+</head>
+
+<body class="bg-white">
+    <!-- Header -->
+    <%- include('partials/header') %>
+
+    <div class="flex pt-10">
+        <!-- Sidebar -->
+        <%- include('partials/sidebar', { 
+            activePage: locals.activePage || ''
+        }) %>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-44 p-3">
+            <%- defineContent('body') %>
+        </main>
+    </div>
+
+    <!-- Sidebar Toggle Script -->
+    <script src="/ts/sidebar.ts"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!-- Table Section -->
+<div class="border rounded">
+  <div class="flex items-center justify-between px-3 py-2 border-b bg-slate-50">
+      <h2 class="text-xs font-medium">Sub Division Table</h2>
+  </div>
+  <div class="overflow-x-auto">
+      <table class="min-w-full">
+          <thead>
+              <tr class="bg-slate-50 text-left">
+                  <th class="px-3 py-1.5 text-xs font-medium text-slate-500">id</th>
+                  <th class="px-3 py-1.5 text-xs font-medium text-slate-500">name</th>
+                  <th class="px-3 py-1.5 text-xs font-medium text-slate-500">division_id</th>
+              </tr>
+          </thead>
+          <tbody>
+              <% data.forEach((item, index) => { %>
+                  <tr class="<%= index % 2 === 0 ? 'bg-white' : 'bg-slate-50' %> border-b">
+                      <td class="px-3 py-1.5 text-xs text-slate-900"><%= item.id %></td>
+                      <td class="px-3 py-1.5 text-xs text-slate-900">
+                          <div class="flex items-center"><%= item.name %></div>
+                      </td>
+                      <td class="px-3 py-1.5 text-xs text-slate-600"><%= item.division_id %></td>
+                  </tr>
+              <% }); %>
+          </tbody>
+      </table>
+  </div>
+</div>

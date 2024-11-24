@@ -52,9 +52,10 @@ export class VersionTracker {
       let context: BrowserContext;
 
       try {
-        browser = await chromium.launch({ headless: true, timeout: 120 * 1000 });
+        browser = await chromium.launch({ headless: true });
         context = await browser.newContext();
         const page = await context.newPage();
+        page.setDefaultTimeout(120 * 1000);
         const data = await scraper({ page, targetDependency: config.dependency, targetUrl: config.targetUrl });
 
         if (storeInCompareData) {
