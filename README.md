@@ -64,7 +64,7 @@ cd qa-sandbox
 npm install
 ```
 
-6. Start the development server:
+6. Start project:
 
 ```bash
 npm run dev
