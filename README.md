@@ -248,7 +248,7 @@ Note: For action steps without parameters, include an empty list item in the par
 | POST   | /action/run-single | Run single action    |
 | POST   | /action/run-batch  | Run multiple actions |
 
-Single action example:
+Running Single Action:
 
 ```bash
 curl -X POST http://localhost:3000/action/run-single \
@@ -258,6 +258,29 @@ curl -X POST http://localhost:3000/action/run-single \
             "actionName": "Set Anyone Can Register"
          }'
 ```
+
+Running Batch Action
+
+```bash
+curl -X POST http://localhost:3000/action/run-single \
+     -H "Content-Type: application/json" \
+     -d '[
+          {
+              "project": "wordpress",
+              "actionName": "Wordpress Site Setup",
+              "databaseName": "testdb4"
+          },
+          {
+              "project": "wordpress",
+              "actionName": "Set Anyone Can Register"
+          },
+          {
+              "project": "wordpress",
+              "actionName": "Change Permalink"
+          }
+        ]'
+```
+
 
 #### Parameter Override
 
