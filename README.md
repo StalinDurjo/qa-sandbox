@@ -262,7 +262,7 @@ curl -X POST http://localhost:3000/action/run-single \
 Running Batch Action
 
 ```bash
-curl -X POST http://localhost:3000/action/run-single \
+curl -X POST http://localhost:3000/action/run-batch \
      -H "Content-Type: application/json" \
      -d '[
           {
